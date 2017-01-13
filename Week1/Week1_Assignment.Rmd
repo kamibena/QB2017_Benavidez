@@ -1,6 +1,6 @@
 ---
 title: "Week 1 Assignment: Basic R"
-author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
+author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
