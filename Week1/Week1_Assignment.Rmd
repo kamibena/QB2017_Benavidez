@@ -50,7 +50,9 @@ In the R code chunk below, please provide the code to:
 
 ```{r}
 
-
+rm(list = ls())
+getwd()
+setwd("~/GitHub/QB2017_Benavidez/Week1")
 
 ```
 
