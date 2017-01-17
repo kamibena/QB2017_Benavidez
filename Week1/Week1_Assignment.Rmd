@@ -2,9 +2,6 @@
 title: "Week 1 Assignment: Basic R"
 <<<<<<< HEAD
 author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
-=======
-author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
->>>>>>> upstream/master
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
@@ -54,13 +51,10 @@ In the R code chunk below, please provide the code to:
 
 ```{r}
 
-<<<<<<< HEAD
 rm(list = ls())
 getwd()
-setwd("~/GitHub/QB2017_Benavidez/Week1")
-=======
+setwd("C:/Users/Michelle/GitHub/QB2017_Benavidez/Week1")
 
->>>>>>> upstream/master
 
 ```
 
@@ -75,7 +69,7 @@ Feel free to reference the Week 0 handout.
 4) the log (base e) of your favorite number.
 
 ```{r}
-<<<<<<< HEAD
+
 cubevolume=5^3
 cubevolume
 circleradius=pi*2^2
@@ -84,11 +78,6 @@ lengthrst=(sin(pi/4))*(sqrt(2))
 lengthrst
 favelog=log(3)
 favelog
-=======
-
-
-
->>>>>>> upstream/master
 
 ```
 
@@ -105,17 +94,13 @@ In the R code chunk below, do the following:
 3) Add `x` and `w` and divide by 15.
 
 ```{r}
-<<<<<<< HEAD
+
 x=c(1,2,3,4,5)
 x
 w=x*14
 w
 number3=(x+w)/15
 number3
-=======
-
-
->>>>>>> upstream/master
 
 ```
 
@@ -125,18 +110,14 @@ Now, do the following:
 3) Use the combine function to create one more vector, `d` that consists of any three elements from `w` and any four elements of `k`.
 
 ```{r}
-<<<<<<< HEAD
+
 k=c(2,4,6,8,10)
 k
 number2=k*x
 number2
 d=c(14,28,42,2,4,6,8)
 d
-=======
 
-
-
->>>>>>> upstream/master
 ```
 
 ### Summary Statistics of Vectors
@@ -144,19 +125,18 @@ d
 In the R code chunk below, calculate the **summary statistics** (i.e., maximum, minimum, sum, mean, median, variance, standard deviation, and standard error of the mean) for the vector (`v`) provided.
 
 ```{r}
+
 v <- c(16.4, 16.0, 10.1, 16.8, 20.5, NA, 20.2, 13.1, 24.8, 20.2, 25.0, 20.5, 30.5, 31.4, 27.1)
 
-gfdsf
-
-
-
-
-
-
-
-
-
-
+max(v,na.rm=T)
+min(v,na.rm=T)
+sum(v,na.rm=T)
+mean(v,na.rm=T)
+median(v,na.rm=T)
+var(v,na.rm=T)
+sd(v,na.rm=T)
+sem=function(x){sd(na.omit(x))/sqrt(length(na.omit(x)))}
+sem(v)
 
 ```
 
@@ -169,9 +149,13 @@ Make the mean of the first column equal to 8 with a standard deviation of 2 and 
 
 ```{r}
 
-
-
-
+one=c(rnorm(5,mean=8,sd=2))
+two=c(rnorm(5,mean=25,sd=10))
+one
+two
+onetwo=cbind(one,two)
+onetwomatrix=matrix(onetwo, nrow=5,ncol=2,byrow=F)
+onetwomatrix
 
 ```
 
@@ -179,7 +163,7 @@ Make the mean of the first column equal to 8 with a standard deviation of 2 and 
 What do the arguments in this function specify? 
 Remember to use `help()` or type `?rnorm`.
 
-> Answer 1:
+> ***Answer 1:The command rnorm draws random numbers from a normal distribution based on user-defined parameters.  Arguements: rnorm (number of numbers to draw, average of the numbers drawn, standard deviation of the numbers drawn)
 
 
 In the R code chunk below, do the following: 
@@ -188,16 +172,17 @@ In the R code chunk below, do the following:
 3) Determine the dimensions of the transposed matrix.
 
 ```{r}
-
-
-
+m=as.matrix(read.table("data/matrix.txt",sep="\t",header=F))
+m
+transposem=t(m)
+transposem
+dim(transposem)
 ```
 
 
 ***Question 2***: What are the dimensions of the matrix you just transposed?
 
-> Answer 2:
-
+> ***Answer 2: 5X10
 
 ###Indexing a Matrix
 
@@ -206,13 +191,15 @@ In the R code chunk below, do the following:
 2) Remove the last row of matrix `m`.
 
 ```{r}
-
-
+indexm=transposem[,c(1:2,4:10)]
+indexm
+indexm2=indexm[c(1:4),c(1:9)]
+indexm2
 ```
 
 ***Question 3***: Describe what we just did in the last series of indexing steps.
 
-> ***Answer 3***:
+> ***Answer 3: In the last series of steps we excluded specified rows and columns by concatenating the row/columns we wanted to include in the matrices.  In the first step, columns 1 through 4 were concatenated with columns 4 through 10; thereby excluding column three.  The comma included before the column concatenation indicates that all rows should be included.  For step two, the modified matrix was used and rows 1 through 4 were concatenated and grouped with columns 1 through 9; thereby excluding row 5 (i.e. the last row). 
 
 
 ## 6) BASIC DATA VISUALIZATION AND STATISTICAL ANALYSIS
@@ -223,7 +210,8 @@ In the R code chunk below, do the following:
 2) Display the structure of this data set.
 
 ```{r}
-
+meso=read.table("data/zoop_nuts.txt",sep="\t",header=T)
+str(meso)
 
 ```
 
@@ -235,14 +223,17 @@ In the R code chunk below, do the following:
 3) Conduct a simple **Pearson's correlation** analysis.
 
 ```{r}
-
-
+meso.num=meso[,3:8]
+pairs(meso.num)
+cor1=cor(meso.num)
+cor1
+pairs(meso.num)
 ```
 
 
 ***Question 4***: Describe some of the general features based on the visualization and correlation analysis above?
 
-> Answer 4:
+> ***Answer 4: TN/TIN has a very strong positive correlation.  TN/SRP, TP/TN, ZP/TN, TP/TRN, TIN/ZP, and TIN/SRP have strong to moderately strong positive correlations.  ZP/TP, TP/SRP, ZP/SRP have moderate positive correlations.  CHLA lacks noticable correlation with any other factor.  Overall, total nitrogen and total inorganic nutrient concentration have the strongest correlation with total biomass.
 
 
 In the R code chunk below, do the following:
@@ -251,9 +242,14 @@ In the R code chunk below, do the following:
 3) Use the print command from the handout to see the results of each correlation analysis.
 
 ```{r}
-
-
-
+install.packages("psych")
+library("psych", lib.loc="~/R/win-library/3.1")
+cor2=corr.test(meso.num,method="pearson",adjust="BH")
+cor2
+cor2non=corr.test(meso.num,method="spearman",adjust="BH")
+cor2non
+print(cor2,digits = 3)
+print(cor2non,digits = 3)
 ```
 
 ***Question 5***: Describe what you learned from `corr.test`. 
@@ -262,14 +258,14 @@ Specifically, are the results sensitive to whether you use parametric (i.e., Pea
 When should one use non-parametric methods instead of parametric methods?
 With the Pearson's method, is there evidence for false discovery rate due to multiple comparisons? Why is false discovery rate important?
 
-> ***Answer 5***: 
-
+> ***Answer 5: In the case of this dataset, the results were somewhat sensitive to parametric vs nonparametric tests.  One should use non-parametric tests when the data does not meet the assumptions of the test (i.e. normality of data distrubtion, independence of variables, homoscedasticity).  Using the Pearson method, there is minimal evidence that suggests a false discovery rate due to mulitple comparisons.  Assessing false discovery rates is important for determining how susceptible your data/test are to Type I and II errors.
 
 In the R code chunk below, use the `corrplot` function in the *corrplot* package to produce the ellipse correlation plot in the handout.
 
 ```{r}
-
-
+install.packages("corrplot")
+require("corrplot")
+corrplot(cor1,method="ellipse")
 ```
 
 ### Linear Regression
@@ -280,35 +276,51 @@ In the R code chunk below, do the following:
 3) Produce a plot of this regression analysis including the following: categorically labeled points, the predicted regression line with 95% confidence intervals, and the appropriate axis labels.
 
 ```{r}
-
-
-
-
-
+fitreg=lm(ZP~TN,data=meso)
+summary(fitreg)
+plot(meso$TN, meso$ZP, ylim=c(0,10),xlim=c(500,5000),xlab=expression(paste("Total Nitrogen (",mu,"g/L)")),ylab="Zooplankton Biomass (mg/L)",las=1)
+text(meso$TN, meso$ZP, meso$NUTS, pos = 3, cex = 0.8)
+text(meso$TN, meso$ZP, meso$NUTS, pos = 3, cex = 0.8)
+newTN=seq(min(meso$TN), max(meso$TN), 10)
+regline=predict(fitreg, newdata = data.frame(TN = newTN))
+lines(newTN, regline)
+text(meso$TN, meso$ZP, meso$NUTS, pos = 3, cex = 0.8)
+newTN=seq(min(meso$TN), max(meso$TN), 10)
+regline=predict(fitreg, newdata = data.frame(TN = newTN))
+lines(newTN, regline)
+conf95=predict(fitreg, newdata = data.frame(TN = newTN),interval = c("confidence"), level = 0.95, type = "response")
+matlines(newTN, conf95[, c("lwr", "upr")], type="l", lty = 2, lwd = 1, col = "black")
 
 
 ```
 
 ***Question 6***: Interpret the results from the regression model
 
-> ***Answer 6***:
-
+> ***Answer 6: TN has a significant effect on the reponse variable (F = 20.29, df=1/22, p < .001).  For each unit of change in TN the reponse variable changes by a factor of 0.001.  
 
 
 ***Question 7***: Explain what the `predict()` function is doing in our analyses.
 
-> ***Answer 7***:
+> ***Answer 7: The predict function is generating the regression line, which in a sense generates an expected trajectory line that provides a visualiztion of the direction and strength of the effect of predictor variables on the reponse variable based on the specified model parameters.
 
 Using the R code chunk below, use the code provided in the handout to determine if our data meet the assumptions of the linear regression analysis. 
 
 ```{r}
-
+par(mfrow = c(2, 2), mar = c(5.1 ,4.1 ,4.1 ,2.1))
+plot(fitreg)
 ```
 
-+ Upper left: is there a random distribution of the residuals around zero (horizontal line)?
-+ Upper right: is there a reasonably linear relationship between standardized residuals and theoretical quantiles? Try `help(qqplot)`
-+ Bottom left: again, looking for a random distribution of sqrt(standardized residuals)
-+ Bottom right: leverage indicates the influence of points; contours correspond with Cook's distance, where values > |1| are "suspicious"
++  Upper left: is there a random distribution of the residuals around zero (horizontal line)?  
+> ***There does appear to be a randon distribution because no specific patterns or clustering are present in relation to zero.
+
++ Upper right: is there a reasonably linear relationship between standardized residuals and theoretical quantiles? Try `help(qqplot)` 
+> ***There is a reasonably linear relation between standardized residuals and the theoretical quantiles.  The devition of the perfect linear relationsip are miniscule.
+
++ Bottom left: again, looking for a random distribution of sqrt(standardized residuals) 
+> ***Again, the distribution appears random because there is not a distinct pattern in the distribution of data points.
+
++ Bottom right: leverage indicates the influence of points; contours correspond with Cook's distance, where values > |1| are "suspicious" 
+> ***There does not appear to be influential points when comparing residuals and leverage.  All points appear to be within Cook's line.
 
 ### Analysis of Variance (ANOVA)
 
@@ -320,24 +332,32 @@ Using the R code chunk below, do the following:
 5) Use a Tukey's HSD to identify which treatments are different. 
 
 ```{r}
-
-
-
-
-
-
+NUTS=factor(meso$NUTS, levels = c('L', 'M', 'H'))
+zp.sem <- tapply(meso$ZP, NUTS, sem)
+zp.means=tapply(meso$ZP, NUTS, mean)
+sem=function(x){sd(na.omit(x))/sqrt(length(na.omit(x)))}
+zp.sem=tapply(meso$ZP, NUTS, sem)
+bp=barplot(zp.means, ylim =c(0, round(max(meso$ZP), digits = 0)),pch = 15, cex = 1.25, las = 1, cex.lab = 1.4, cex.axis = 1.25,xlab = "nutrient supply",ylab = "zooplankton biomass (mg/L)",names.arg = c("low", "medium", "high"))
+arrows(x0 = bp, y0 = zp.means, y1 = zp.means - zp.sem, angle = 90,length = 0.1, lwd = 1)
+arrows(x0 = bp, y0 = zp.means, y1 = zp.means + zp.sem, angle = 90,length = 0.1, lwd = 1)
+fitanova=aov(ZP ~ NUTS, data = meso)
+summary(fitanova)
+TukeyHSD(fitanova)
 
 ```
 
 ***Question 8***: How do you interpret the ANOVA results relative to the regression results?
 Do you have any concerns about this analysis?
 
-> ***Answer 8***:
-
+> ***Answer 8: There appear to be significant differences between at least one pair of treatment levels (F=11.77, df=2/22, p < 0.001).  The post hoc test identified a significant difference between the Low and High groups and the Medium and High groups.  Since CI overlap zero for the Medium and Low group, I conclude that they are not statistically different.  At this point, assumptions have not been checked, but otherwise I have no particualr concerns about the analysis.
 
 Using the R code chunk below, use the diagnostic code provided in the handout to determine if our data meet the assumptions of ANVOA (similar to regression). 
 
+> Data may be heteroskedastic because there appears to be a football-shaped pattern among group variances; therefore the data does not meet the assumptions.
+
 ```{r}
+par(mfrow = c(2, 2), mar = c(5.1, 4.1, 4.1, 2.1))
+plot(fitanova)
 
 ```
 
@@ -367,10 +387,17 @@ The remaining columns of data refer to the biomass (µg/L) of different zooplank
 
 ***Question 9***: With the visualization and statistical tools that we learned about in the Week 1 Handout, use the site-by-species matrix to assess whether and how different zooplankton taxa were responsible for the total biomass (ZP) response to nutrient enrichment. Describe what you learned below in the "Answer" section and include appropriate code in the R chunk.
 
+> ***Answer 9:  Zooplankton species are not a good indicator of biomass change in reference to total biomass reponse to nutrient enrichment.
+
 ```{r}
-
-
-
+zoop <-read.table("data/zoops.txt", sep = "\t", header = TRUE)
+data=merge(zoop,meso$ZP)
+data.num=data[,3:12]
+pairs(data.num)
+zoocor1=cor(data.num)
+zoocor2=corr.test(data.num,method="pearson",adjust="BH")
+print(zoocor2,digits=3)
+corrplot(zoocor1,method="ellipse")
 
 ```
 
