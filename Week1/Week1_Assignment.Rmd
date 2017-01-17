@@ -263,7 +263,7 @@ In the R code chunk below, use the `corrplot` function in the *corrplot* package
 
 ```{r}
 
-corrplot(cor1,method="ellipse")
+corrplot::corrplot(cor1,method="ellipse")
 
 ```
 
@@ -396,7 +396,7 @@ pairs(data.num)
 zoocor1=cor(data.num)
 zoocor2=corr.test(data.num,method="pearson",adjust="BH")
 print(zoocor2,digits=3)
-corrplot(zoocor1,method="ellipse")
+corrplot::corrplot(zoocor1,method="ellipse")
 
 ```
 
