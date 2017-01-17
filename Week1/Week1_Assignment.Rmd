@@ -1,6 +1,5 @@
 ---
 title: "Week 1 Assignment: Basic R"
-<<<<<<< HEAD
 author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
