@@ -241,7 +241,7 @@ In the R code chunk below, do the following:
 3) Use the print command from the handout to see the results of each correlation analysis.
 
 ```{r}
-install.packages("psych")
+
 library("psych", lib.loc="~/R/win-library/3.1")
 cor2=corr.test(meso.num,method="pearson",adjust="BH")
 cor2
@@ -262,9 +262,9 @@ With the Pearson's method, is there evidence for false discovery rate due to mul
 In the R code chunk below, use the `corrplot` function in the *corrplot* package to produce the ellipse correlation plot in the handout.
 
 ```{r}
-install.packages("corrplot")
-require("corrplot")
+
 corrplot(cor1,method="ellipse")
+
 ```
 
 ### Linear Regression
