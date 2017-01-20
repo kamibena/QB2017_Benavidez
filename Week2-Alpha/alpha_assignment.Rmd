@@ -1,6 +1,6 @@
 ---
 title: "Assignment: Local (alpha) Diversity"
-author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
+author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
@@ -35,10 +35,11 @@ In the R code chunk below, please provide the code to:
 4) Load the `vegan` R package (be sure to install if needed).
 
 ```{r}
-
-
-
-
+rm(list=ls())
+getwd()
+setwd("~/GitHub/QB2017_Benavidez/Week2-Alpha")
+install.packages("vegan")
+require("vegan")
 ```
 
 ## 2) LOADING DATA
@@ -48,8 +49,8 @@ In the R code chunk below, do the following:
 2) Display the structure of the dataset (if the structure is long, use `max.level=0` to show just basic information).
 
 ```{r}
-
-
+data(BCI)
+str(BCI)
 ```
 
 ## 3) SPECIES RICHNESS
@@ -68,16 +69,20 @@ In the R code chunk below, do the following:
 
 ```{r}
 
-# S.obs <- function(   ){
-#   rowSums(     ) * 
-#   }
+S.obs=function(x = ""){ rowSums(x > 0) * 1}
+site1=BCI[1,]
+S.obs(site1)
+specnumber(site1)
+
+sites=BCI[1:4,]
+specnumber(sites)
 
 ```
 
-***Question 1***: Does `specnumber()` from `vegan` return the same value for observed richness in `site1` as our function `S.obs`?
+***Question 1***: Does `specnumber()` from `vegan` return the same value for observed richness in `site1` as our function `S.obs`?  
 What is the species richness of the first 4 sites (i.e., rows) of the BCI matrix?
 
-> ***Answer 1***:
+> ***Answer 1***:  specnumber() and the funtion S.obs does return the same number for observes richness.  Richness for the first four sites totals 361.
 
 
 
@@ -90,7 +95,7 @@ In the R code chunk below, do the following:
 2. Use that function to calculate coverage for all sites in the BCI matrix.
 
 ```{r}
-
+C=function(x = ""){1 - (sum(x == 1) / rowSums(x)) }
 
 ```
   
@@ -125,19 +130,18 @@ In the R code chunk below, do the following:
 5. Calculate the coverage at that particular site
 
 ```{r}
-
-
-
-
-
-
+soilbac=read.table("data/soilbac.txt",sep="\t",header=T,row.names=1)
+soilbac.t=as.data.frame(t(soilbac))
+soilbac1=soilbac.t[1,]
+specnumber(soilbac1)
+C(soilbac1)
 ```
 
 ***Question 3***: Answer the following questions about the soil bacterial dataset. 
 
 a.  How many sequences did we recover from the sample `soilbac1`, i.e. *N*? 
-b.  What is the observed richness of `soilbac1`? 
-c.  How does coverage compare between the BCI sample (`site1`) and the KBS sample (`soilbac1`)?
+b.  What is the observed richness of `soilbac1`? 0.648
+c.  How does coverage compare between the BCI sample (`site1`) and the KBS sample (`soilbac1`)?  
 
 > ***Answer 3a***:  
 
