@@ -50,7 +50,7 @@ In the R code chunk below, do the following:
 
 ```{r}
 data(BCI)
-str(BCI)
+str(BCI,max.level=50)
 ```
 
 ## 3) SPECIES RICHNESS
@@ -82,7 +82,7 @@ specnumber(sites)
 ***Question 1***: Does `specnumber()` from `vegan` return the same value for observed richness in `site1` as our function `S.obs`?  
 What is the species richness of the first 4 sites (i.e., rows) of the BCI matrix?
 
-> ***Answer 1***:  specnumber() and the funtion S.obs does return the same number for observes richness.  Richness for the first four sites totals 361.
+> Answer 1***:  specnumber() and the funtion S.obs do return the same number for observes richness.  Richness for the first four sites totals 361.
 
 
 
@@ -106,13 +106,13 @@ b.  What would we conclude from Good's Coverage if $n_{i}$ equaled *N*?
 c.  What portion of taxa in `site1` were represented by singletons? 
 d.  Make some observations about coverage at the BCI plots.
 
-> ***Answer 2a***:  
+> Answer 2a***:  Good's Coverage ranges from 0 - 1.
 
-> ***Answer 2b***:  
+> Answer 2b***:  If the number of singletons equaled the number of individuals in the sample, then Good's Coverage would equal 0.  This is likely an indication that a substantial number of OTUs were not discovered in the sampling area.  (i.e. The site was not sampled well.)
 
-> ***Answer 2c***:  
+> Answer 2c***:  Approximtely 7% of the sampled individuals are represented by singletones.
 
-> ***Answer 2d***:  
+> Answer 2d***:  Based on coverage at site 1, the plots were sampled well and a majority of the rare species are accounted for.  
 
 
 ### Estimated Richness
@@ -140,14 +140,14 @@ C(soilbac1)
 ***Question 3***: Answer the following questions about the soil bacterial dataset. 
 
 a.  How many sequences did we recover from the sample `soilbac1`, i.e. *N*? 
-b.  What is the observed richness of `soilbac1`? 0.648
-c.  How does coverage compare between the BCI sample (`site1`) and the KBS sample (`soilbac1`)?  
+b.  What is the observed richness of `soilbac1`? 
+c.  How does coverage compare between the BCI sample (`site1`) and the KBS sample (`soilbac1`)? 
 
-> ***Answer 3a***:  
+> Answer 3a***:  13,310 observations
 
-> ***Answer 3b***: 
+> Answer 3b***: 1074 unique sequences
 
-> ***Answer 3c***:  
+> Answer 3c***:  Coverage at BCI (~0.93) reflects better sampleing coverage than that for KBS (~0.65)
 
 
 ### Richness Estimators
@@ -163,13 +163,40 @@ In the R code chunk below, do the following:
 4. Use these functions to estimate richness at both `site1` and `soilbac1`. 
 
 ```{r}
+Schao1=function(x=""){
+S.obs(x)+(sum(x==1)^2)/(2*sum(x==2))
+}
+S.chao1=function(x=""){
+S.obs(x)+(sum(x==1)^2)/(2*sum(x==2))
+}
 
+S.chao2=function(site="",SbyS=""){
+SbyS=as.data.frame(SbyS)
+x=SbyS[site,]
+SbyS.pa=(Sbys>0)*1
+Q1=sum(colSums(SbyS.pa)==1)
+Q2=sum(colSums(SbyS.pa)==2)
+S.chao2=S.obs(x)+(Q1^2)/(2*Q2)
+return(S.chao2)
+}
 
-
-
-
-
-
+S.ace=function(x="",thresh=10){
+x=x[x>0]
+S.abund=length(which(x>thresh))
+S.rare=length(which(x<=thresh))
+singlet=length(which(x==1))
+N.rare=sum(x[which(x<=thresh)])
+C.ace=1-(singlet/N.rare)
+i=c(1:thresh)
+count=function(i,y){
+length(y[y==i])
+}
+a.1=sapply(i,count,x)
+f.1=(i(i-1))*a.1
+G.ace=(S.rare/C.ace)*(sum(f.1)/(N.rare*(N.rare-1)))
+S.ace=S.abund+(S.rare/C.ace)+(singlet/C.ace)*max(G.ace,0)
+return(S.ace)
+}
 
 
 
