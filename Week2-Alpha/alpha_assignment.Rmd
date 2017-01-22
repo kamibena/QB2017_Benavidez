@@ -199,10 +199,10 @@ return(S.ace)
 }
 
 
-
-
-
-
+S.chao1(site1)
+S.chao1(soilbac1)
+S.chao2(1,BCI)
+S.chao2(1,soilbac.t)
 
 
 
@@ -374,7 +374,7 @@ In the R code chunk below, please do the following:
 
 ```{r}
 
-ShanH <- function(x = ""){
+ShanH=function(x = ""){
     H = 0
     for (n_i in x){
         if(n_i > 0) {
@@ -409,7 +409,7 @@ In the R code chunk below, please do the following:
 
 ```{r}
 
-SimpD <- function(x = ""){
+SimpD=function(x = ""){
     D = 0
     N = sum(x)
     for (n_i in x){
@@ -486,7 +486,7 @@ In the R code chunk below, please do the following:
 3. Plot the results of the `radfit()` function using the code provided in the handout.
 
 ```{r}
-RACresults <- radfit(site1)
+RACresults=radfit(site1)
 plot.new()
 plot(RACresults, las = 1, cex.lab = 1.4, cex.axis = 1.25)
 
