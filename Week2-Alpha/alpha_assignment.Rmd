@@ -326,10 +326,7 @@ In the R code chunk below, please do the following:
 3. Compare $E_{1/D}$ and $E_{var}$.
 
 ```{r}
-Evar=function(x){
-x=as.vector(x[x > 0])
-1 - (2/pi)*atan(var(log(x)))
-}
+
 
 Evar(site1)
 
@@ -495,14 +492,16 @@ To address this homework question, use the R function **hist()** to plot the fre
 3.  We asked you to find a biodiversity dataset with your partner.
 This data could be one of your own or it could be something that you obtained from the literature. 
 Load that dataset.
+> We have data for seven years - for these questions, I am entering data for the earilest of those years.
+
 How many sites are there?
-> Answer:  There are two general locations each possessing three sites.
+> Answer: 1250
 
 How many species are there in the entire site-by-species matrix?
-> Answer: On BCI matrix includes 317 species. Off BCI matrix includes 246 spcies. 
+> Answer: 306
 
 Any other interesting observations based on what you learned this week?
-> Answer: Setting up a matric from existing abudance data was not as easy as I thought.  May need some reowrking before we can perform all the necessary tests for assessing diversity.
+> Answer: Coverage seems to be above 0.75 for all sites.     
 
 ## SUBMITTING YOUR ASSIGNMENT
 Use Knitr to create a PDF of your completed alpha_assignment.Rmd document, push it to GitHub, and create a pull request.
