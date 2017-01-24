@@ -81,7 +81,7 @@ specnumber(sites)
 ***Question 1***: Does `specnumber()` from `vegan` return the same value for observed richness in `site1` as our function `S.obs`?  
 What is the species richness of the first 4 sites (i.e., rows) of the BCI matrix?
 
-> Answer 1***:  specnumber() and the funtion S.obs do return the same number for observes richness.  Richness for the first four sites totals 361.
+> Answer 1***:  specnumber and the funtion S.obs do return the same number for observes richness.  Richness for the first four sites totals 361.
 
 ### Coverage. How Well Did You Sample Your Site?
 
@@ -110,7 +110,7 @@ d.  Make some observations about coverage at the BCI plots.
 
 > Answer 2c***:  Approximtely 7% of the sampled individuals are represented by singletones.
 
-> Answer 2d***:  Based on coverage at site 1, the plots were sampled well and a majority of the rare species are accounted for.  
+> Answer 2d***:  Coverage ranges from 0.87 to 0.95 which is relativly good.  It seems as if all site were sampled relatively well.  
 
 ### Estimated Richness
 
@@ -288,8 +288,7 @@ par <- opar
 
 ***Question 5***: What effect does visualizing species abundance data on a log-scaled axis have on how we interpret evenness in the RAC?
 
-> Answer 5***: The visiualization gives as idea of how evenly abundance is distributed among observations.
-
+> Answer 5***: The log-scale visiualization gives as idea of how evenly abundance is distributed among observations.  Further it gives us insight on what ranking of species are most responsible for the uneveness.
 
 Now that we have visualized unevennes, it is time to quantify it using Simpson's evenness ($E_{1/D}$) and Smith and Wilson's evenness index ($E_{var}$).
 
@@ -326,7 +325,9 @@ In the R code chunk below, please do the following:
 3. Compare $E_{1/D}$ and $E_{var}$.
 
 ```{r}
-
+Evar=function(x){
+  x=as.vector(x[x > 0])
+  1 - (2/pi)*atan(var(log(x))) }
 
 Evar(site1)
 
@@ -335,7 +336,7 @@ Evar(site1)
 ***Question 6***: Compare estimates of evenness for `site1` of BCI using $E_{1/D}$ and $E_{var}$.
 Do they agree? If so, why? If not, why? What can you infer from the results.
 
-> Answer 6***: Reponses from Simpson (~0.42) are not equal to Smith and Wilson (~0.51); therefore they two tests do not necessarily agree.  This disagreement is likely due to Simpson being biased towards differences in the most abundant species.  Smith and Wilson provides a more robust meaure of evenness than Simpson so due to the unevenness in dataset Smith and Wilson provide a better measure.  Based on results of Smith and Wilson, eveness is moderatly even.
+> Answer 6***: Reponses from Simpson (~0.42) are not equal to Smith and Wilson (~0.51); therefore they two tests do not necessarily agree.  This disagreement is likely due to Simpson being biased towards differences in the most abundant species.  Smith and Wilson provides a more robust meaure of evenness than Simpson.  Due to the unevenness in dataset Smith and Wilson provide a better measure.  Based on results of Smith and Wilson, eveness is moderatly even.
 
 
 ##5) INTEGRATING RICHNESS AND EVENNESS: DIVERSITY METRICS
@@ -463,15 +464,15 @@ plot(RACresults, las = 1, cex.lab = 1.4, cex.axis = 1.25)
 a) Based on the output of `radfit()` and plotting above, discuss which model best fits our rank-abundance curve for `site1`?
 b) Can we make any inferences about the forces, processes, and/or mechanisms influencing the structure of our system, e.g., an ecological community?
 
-> Answer 9a***: Based on the results, it appears as if the Mandelbrot is the best fit for our site1 RAC.  This model falls closely to the middle of most observations in the data set and does not deviate significantly from the distribution.
-> Answer 9b***:  You would like need more information about the ecological community before generating inferences on processess, forces, and/or mechanisms.  The RAC simply gives us an idea about eveness and richness of the community.  With teh RAC, you could infer what model best fits the data.
+> Answer 9a***: Based on the visualization of the results, it appears as if the Mandelbrot is the best fit for our site1 RAC.  This model falls closely to the middle of most observations in the data set and does not deviate significantly from the distribution.
+> Answer 9b***:  The community seems to have low evenness. The steep slope at the beginning suggests that more abundant species (low rank) are at much higher abundances than lower ranked species. Looking at individual species and understanding life history of those species may give us a better understanding on what type of mechanisms may be at play.
 
 ***Question 10***: Answer the following questions about the preemption model:
 a.  What does the preemption model assume about the relationship between total abundance (*N*) and total resources that can be preempted?
 b.  Why does the niche preemption model look like a straight line in the RAD plot?
 
 > Answer 10a***:  The preemption model assumes a geometric relationship between rank and abundance; therefore, the total resources that can be preempted for each new species is directy proportional to the previously colonized species. 
-> Answer 10b***:  THe preemption model looks like a straight line compared to the other models on teh RAD because of the geometric relationship it assumes.  So if the first colonizing species represents 1, then the second would represent 0.5, the third 0.25, etc... so it looks like a linear relationship when graphed.
+> Answer 10b***:  The preemption model looks like a straight line compared to the other models on the RAC because of the geometric relationship it assumes.  For example, if the first colonizing species represents 1, then the second would represent 0.5, the third 0.25, etc... so it looks like a linear relationship when graphed.
 
 ***Question 11***: Why is it important to account for the number of parameters a model uses when judging how well it explains a given set of data?
 
@@ -492,7 +493,7 @@ To address this homework question, use the R function **hist()** to plot the fre
 3.  We asked you to find a biodiversity dataset with your partner.
 This data could be one of your own or it could be something that you obtained from the literature. 
 Load that dataset.
-> We have data for seven years - for these questions, I am entering data for the earilest of those years.
+> We have data for seven years - for these questions, I am entering data for the earilest of those years (1982).
 
 How many sites are there?
 > Answer: 1250
