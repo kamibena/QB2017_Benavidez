@@ -38,7 +38,6 @@ In the R code chunk below, please provide the code to:
 rm(list=ls())
 getwd()
 setwd("~/GitHub/QB2017_Benavidez/Week2-Alpha")
-install.packages("vegan")
 require("vegan")
 ```
 
@@ -84,8 +83,6 @@ What is the species richness of the first 4 sites (i.e., rows) of the BCI matrix
 
 > Answer 1***:  specnumber() and the funtion S.obs do return the same number for observes richness.  Richness for the first four sites totals 361.
 
-
-
 ### Coverage. How Well Did You Sample Your Site?
 
 In the R code chunk below, do the following:
@@ -96,7 +93,8 @@ In the R code chunk below, do the following:
 
 ```{r}
 C=function(x = ""){1 - (sum(x == 1) / rowSums(x)) }
-C(BCI)
+C.all=function(x = ""){1 - (rowSums(x == 1) / rowSums(x)) }
+C.all(BCI)
 ```
   
 ***Question 2***: Answer the following questions about coverage:
@@ -113,7 +111,6 @@ d.  Make some observations about coverage at the BCI plots.
 > Answer 2c***:  Approximtely 7% of the sampled individuals are represented by singletones.
 
 > Answer 2d***:  Based on coverage at site 1, the plots were sampled well and a majority of the rare species are accounted for.  
-
 
 ### Estimated Richness
 
@@ -135,6 +132,7 @@ soilbac.t=as.data.frame(t(soilbac))
 soilbac1=soilbac.t[1,]
 specnumber(soilbac1)
 C(soilbac1)
+rowSums(soilbac1)
 ```
 
 ***Question 3***: Answer the following questions about the soil bacterial dataset. 
@@ -143,12 +141,11 @@ a.  How many sequences did we recover from the sample `soilbac1`, i.e. *N*?
 b.  What is the observed richness of `soilbac1`? 
 c.  How does coverage compare between the BCI sample (`site1`) and the KBS sample (`soilbac1`)? 
 
-> Answer 3a***:  13,310 observations
+> Answer 3a***:  2119 observations
 
 > Answer 3b***: 1074 unique sequences
 
 > Answer 3c***:  Coverage at BCI (~0.93) reflects better sampleing coverage than that for KBS (~0.65)
-
 
 ### Richness Estimators
 
@@ -189,7 +186,7 @@ N.rare=sum(x[which(x<=thresh)])
 C.ace=1-(singlet/N.rare)
 i=c(1:thresh)
 count=function(i,y){
-length(y[y==i])
+  length(y[y==i])
 }
 a.1=sapply(i,count,x)
 f.1=(i(i-1))*a.1
@@ -198,15 +195,13 @@ S.ace=S.abund+(S.rare/C.ace)+(singlet/C.ace)*max(G.ace,0)
 return(S.ace)
 }
 
-
 S.chao1(site1)
 S.chao1(soilbac1)
 S.chao2(1,BCI)
 S.chao2(1,soilbac.t)
 
-
-
-
+estimateR(site1)
+estimateR(soilbac1)
 ```
 
 ### Rarefaction
@@ -236,8 +231,7 @@ text(1500,1500,"1:1",pos=2,col='red')
 
 ***Question 4***: What is the difference between ACE and the Chao estimators?
 
-> Answer 4***: Unlike Chao estimators which only estimate singletonsand doulbletons, ACE accounts for rare species (i.e. species numbering less than or equal to 10); therefore, one should use ACE when there is a variety of taxa with only a few individuals.
-
+> Answer 4***: Unlike Chao estimators which only estimate singletons and doulbletons, ACE accounts for rare species (i.e. species numbering less than or equal to 10); therefore, one should use ACE when there is a variety of taxa with only a few individuals.
 
 ##4) SPECIES EVENNESS
 Here, we consider how abundance varies among species, that is, **species evenness**.
@@ -318,7 +312,6 @@ return(E)
 }
 
 SimpE(site1)
-
 
 ```
 
@@ -434,12 +427,11 @@ invD
 Fisher=fisher.alpha(rac)
 Fisher
 
-
 ```
 
 ***Question 8***: How is Fisher's $\boldsymbol\alpha$ different from $E_{H'}$ and $E_{var}$? What does Fisher's $\boldsymbol\alpha$ take into account that $E_{H'}$ and $E_{var}$ do not?
 
-> Answer 8***: Fisher's alpha 
+> Answer 8***: Fisher's alpha is different from Shannon's and Simth & Wilson's because it uses the log seeries distribution.  In addition, Fisher's is also different from Smith & Wilson's and Shannon's in that Fisher's takes into account sampling error.
 
 ##6) MOVING BEYOND UNIVARIATE METRICS OF $\alpha$ DIVERSITY
 
@@ -474,28 +466,25 @@ plot(RACresults, las = 1, cex.lab = 1.4, cex.axis = 1.25)
 a) Based on the output of `radfit()` and plotting above, discuss which model best fits our rank-abundance curve for `site1`?
 b) Can we make any inferences about the forces, processes, and/or mechanisms influencing the structure of our system, e.g., an ecological community?
 
-> Answer 9a***: Based on the results, it appears as if teh Mandelbrot is the best fit for our site1 RAC.  This model falls closely to the middle of most observations in the data set and does not deviate significantly from the distribution.
-> Answer 9b***:  
-
+> Answer 9a***: Based on the results, it appears as if the Mandelbrot is the best fit for our site1 RAC.  This model falls closely to the middle of most observations in the data set and does not deviate significantly from the distribution.
+> Answer 9b***:  You would like need more information about the ecological community before generating inferences on processess, forces, and/or mechanisms.  The RAC simply gives us an idea about eveness and richness of the community.  With teh RAC, you could infer what model best fits the data.
 
 ***Question 10***: Answer the following questions about the preemption model:
 a.  What does the preemption model assume about the relationship between total abundance (*N*) and total resources that can be preempted?
 b.  Why does the niche preemption model look like a straight line in the RAD plot?
 
-> ***Answer 10a***:  THe preemption model assumes a geometric relationship between rank and abundance; therefore, 
-> ***Answer 10b***:
-
-
+> Answer 10a***:  The preemption model assumes a geometric relationship between rank and abundance; therefore, the total resources that can be preempted for each new species is directy proportional to the previously colonized species. 
+> Answer 10b***:  THe preemption model looks like a straight line compared to the other models on teh RAD because of the geometric relationship it assumes.  So if the first colonizing species represents 1, then the second would represent 0.5, the third 0.25, etc... so it looks like a linear relationship when graphed.
 
 ***Question 11***: Why is it important to account for the number of parameters a model uses when judging how well it explains a given set of data?
 
-> ***Answer 11***:
-
+> Answer 11***: You should have a number of parameters that is appropriate for your data so you can maximize adequate fit of the model.  Too many parameters for your data and you may overfit your model.  Too few parameters and your estimator may not be flexiable enough to identify trends in the data. 
 
 ## SYNTHESIS
 
 1.  As stated by Magurran (2004) the  ${D = } \sum p_i^2$ derivation of Simpson's Diversity only applies to communities of infinite size. For anything but an infinitely large community, Simpson's Diversity index is calculated as ${D = } \sum \frac{n_i(n_i -1)} {N(N-1)}$. 
 Assuming a finite community, calculate Simpson's D, 1 - D, and Simpson's inverse (i.e. 1/D) for `site 1` of the BCI site-by-species matrix. 
+> Answer: Simpson's D: [1] 0.9768097; Simpson's D Inverse:  [1] 43.12145
 
 2.  Along with the rank-abundance curve (RAC), another way to visualize the distribution of abundance among species is with a histogram (a.k.a., frequency distribution) that shows the frequency of different abundance classes.
 For example, in a given sample, there may be 10 species represented by a single individual, 8 species with two individuals, 4 species with three individuals, and so on.
@@ -510,10 +499,10 @@ How many sites are there?
 > Answer:  There are two general locations each possessing three sites.
 
 How many species are there in the entire site-by-species matrix?
-> On BCI matrix includes 317 species. Off BCI matrix includes 246 spcies. 
+> Answer: On BCI matrix includes 317 species. Off BCI matrix includes 246 spcies. 
 
 Any other interesting observations based on what you learned this week?
-> Setting up a matric from existing abudance data was not as easy as I thought.  May need some reowrking before we can perform all the necessary tests for assessing diversity.
+> Answer: Setting up a matric from existing abudance data was not as easy as I thought.  May need some reowrking before we can perform all the necessary tests for assessing diversity.
 
 ## SUBMITTING YOUR ASSIGNMENT
 Use Knitr to create a PDF of your completed alpha_assignment.Rmd document, push it to GitHub, and create a pull request.
