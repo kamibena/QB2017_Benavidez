@@ -161,47 +161,47 @@ In the R code chunk below, do the following:
 
 ```{r}
 S.chao1=function(x=""){
-S.obs(x)+(sum(x==1)^2)/(2*sum(x==2))
-}
-S.chao1=function(x=""){
-S.obs(x)+(sum(x==1)^2)/(2*sum(x==2))
+  S.obs(x)+(sum(x==1)^2)/(2*sum(x==2))
+  }
+  S.chao1=function(x=""){
+  S.obs(x)+(sum(x==1)^2)/(2*sum(x==2))
 }
 
 S.chao2=function(site="",SbyS=""){
-SbyS=as.data.frame(SbyS)
-x=SbyS[site,]
-SbyS.pa=(SbyS>0)*1
-Q1=sum(colSums(SbyS.pa)==1)
-Q2=sum(colSums(SbyS.pa)==2)
-S.chao2=S.obs(x)+(Q1^2)/(2*Q2)
-return(S.chao2)
+  SbyS=as.data.frame(SbyS)
+  x=SbyS[site,]
+  SbyS.pa=(SbyS>0)*1
+  Q1=sum(colSums(SbyS.pa)==1)
+  Q2=sum(colSums(SbyS.pa)==2)
+  S.chao2=S.obs(x)+(Q1^2)/(2*Q2)
+  return(S.chao2)
 }
 
-S.ace=function(x="",thresh=10){
-x=x[x>0]
-S.abund=length(which(x>thresh))
-S.rare=length(which(x<=thresh))
-singlet=length(which(x==1))
-N.rare=sum(x[which(x<=thresh)])
-C.ace=1-(singlet/N.rare)
-i=c(1:thresh)
-count=function(i,y){
-  length(y[y==i])
-}
-a.1=sapply(i,count,x)
-f.1=(i(i-1))*a.1
-G.ace=(S.rare/C.ace)*(sum(f.1)/(N.rare*(N.rare-1)))
-S.ace=S.abund+(S.rare/C.ace)+(singlet/C.ace)*max(G.ace,0)
-return(S.ace)
+S.ace=function(x = "", thresh = 10){ 
+  x=x[x>0]                           
+  S.abund=length(which(x > thresh))  
+  S.rare=length(which(x <= thresh)) 
+  singlt=length(which(x == 1))      
+  N.rare=sum(x[which(x <= thresh)]) 
+  C.ace=1 - (singlt / N.rare)     
+  i=c(1:thresh)                
+  count=function(i, y){           
+    length(y[y == i])
+  }
+  a.1=sapply(i, count, x)        
+  f.1=(i * (i - 1)) * a.1       
+  G.ace=(S.rare/C.ace)*(sum(f.1)/(N.rare*(N.rare-1)))
+  S.ace=S.abund + (S.rare/C.ace) + (singlt/C.ace) * max(G.ace,0) 
+  return(S.ace)
 }
 
 S.chao1(site1)
 S.chao1(soilbac1)
 S.chao2(1,BCI)
 S.chao2(1,soilbac.t)
+S.ace(site1)
+S.ace(soilbac1)
 
-estimateR(site1)
-estimateR(soilbac1)
 ```
 
 ### Rarefaction
