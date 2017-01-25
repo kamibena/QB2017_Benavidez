@@ -1,8 +1,10 @@
 ---
-title: "Assignment: Local (alpha) Diversity"
-author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
+title: 'Assignment: Local (alpha) Diversity'
+author: 'Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University'
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  html_document: default
+  pdf_document: default
 geometry: margin=2.54cm
 ---
 
@@ -37,7 +39,7 @@ In the R code chunk below, please provide the code to:
 ```{r}
 rm(list=ls())
 getwd()
-setwd("~/GitHub/QB2017_Benavidez/Week2-Alpha")
+setwd("C:/Users/Michelle/GitHub/QB2017_Benavidez/Week2-Alpha")
 require("vegan")
 ```
 
@@ -406,7 +408,7 @@ diversity(site1, "simp")
 ***Question 7***: Compare estimates of evenness for `site1` of BCI using $E_{H'}$ and $E_{var}$.
 Do they agree? If so, why? If not, why? What can you infer from the results.
 
-> Answer 7***: $E_{var}$ (~0.51) does not agree with $E_{H}$ (~0.74).  This is because The former only calculates evenness while the latter incorporates evenness and richness together thereby providing a measure of uncertainity.
+> Answer 7***: $E_{var}$ (~0.51) does not agree with $E_{H}$ (~0.74).  This is because the former only calculates evenness while the latter incorporates evenness and richness together thereby providing a measure of uncertainity.
 
 ### Fisher's $\boldsymbol\alpha$
 
