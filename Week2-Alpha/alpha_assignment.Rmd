@@ -96,7 +96,7 @@ In the R code chunk below, do the following:
 
 ```{r}
 C=function(x = ""){1 - (sum(x == 1) / rowSums(x)) }
-
+C(BCI)
 ```
   
 ***Question 2***: Answer the following questions about coverage:
@@ -163,10 +163,34 @@ In the R code chunk below, do the following:
 4. Use these functions to estimate richness at both `site1` and `soilbac1`. 
 
 ```{r}
+S.chao1=function(x = ""){S.obs(x) + (sum(x == 1)^2) / (2 * sum(x == 2)) }
+> S.chao2=function(site="",Sbys=""){
+SbyS = as.data.frame(SbyS)
+x = SbyS[site, ]
+SbyS.pa <- (SbyS > 0) * 1
+Q1 = sum(colSums(SbyS.pa) == 1)
+Q2 = sum(colSums(SbyS.pa) == 2)
+S.chao2 = S.obs(x) + (Q1^2)/(2 * Q2)
+return(S.chao2)
+}
 
-
-
-
+> S.ace=function(x="",thresh=10){
+x=x[x>0]
+S.abund=length(which(x>thresh))
+Srare=length(which(x<=thresh))
+singlet=length(which(x==1))
+N.rare=sum(x[which(x<=thresh)])
+Cace=1-(singlet/N.rare)
+i=c(1:thresh)
+count=function(i,y){
+length(y[y==i])
+}
+a.1=sapply(i,count,x)
+f.1=(i*(i-1))*a.1
+G.ace=(S.rare/C.ace)*(sum(f.1)/(N.rare*(N.rare-1)))
+S.ace=Sabund+(S.rare/C.ace)+(singlet/C.ace)*max(G.ace,0)
+return(S.ace)
+}
 
 
 
