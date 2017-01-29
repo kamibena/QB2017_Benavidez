@@ -132,8 +132,8 @@ b.  Is the fish assemblage at site 1 more similar to the one at site 2 or site 1
 c.  Using your understanding of the equation $\beta_{w} = \gamma/\alpha$, how would your interpretation of $\beta$ change if we instead defined beta additively (i.e., $\beta = \gamma - \alpha$)?
 
 > ***Answer 3a***:  
-> ***Answer 3b***:  
-> ***Answer 3c***:  
+> Answer 3b***: The fish assemblage at site 2 is more similar to site 1 than site 10.  
+> Answer 3c***:  If beta was defined additively, you would get a lower beta value.  So, you would interpret beta as the difference between gamma and alpha.
 
 ### The Resemblance Matrix
 In order to quantify $\beta$-diversity for more than two samples, we need to introduce a new primary ecological data structure: the **Resemblance Matrix**. 
@@ -268,8 +268,8 @@ fit=envfit(fish.pcoa, fishREL, perm = 999)
 a.  Describe the grouping of sites in the Doubs River based on fish community composition.
 b.  Generate a hypothesis about which fish species are potential indicators of river quality.
 
-> Answer 7a***:  
-> Answer 7b***:   
+> Answer 7a***:  There appears to be four site groupings based on community composition of fish, however one grouping consists of only few sites that are not tightly clustered.  The three clusters below the x-axis appear to have more sites for which the components are able to explain the variability in the community composition of fish.  However, PCoA axis 2 only explains 16.2% of the variabiliy in the grouping of sites based on species composition.
+> Answer 7b***:   Phph, Rham, Legi, Blbj, and Alal are likely the most imporant indicators of river quality because they have a correlation-coeffeicient > 0.80, so changes in these species indepedently account for at least 80% of the change in species composition of fish.
 
 
 ## 5) HYPOTHESIS TESTING
