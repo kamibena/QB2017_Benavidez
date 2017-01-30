@@ -92,15 +92,9 @@ In the R code chunk below, do the following:
 2. use this function to analyze various aspects of $\beta$-diversity in the Doubs River.  
 
 ```{r}
-beta.w=function(site.by.species = ""){
-  SbyS.pa=decostand(site.by.species, method = "pa") 
-  S=ncol(SbyS.pa[,which(colSums(SbyS.pa) > 0)]) 
-  a.bar <- mean(specnumber(SbyS.pa))
-  b.w=round(S/a.bar, 3)
-  return(b.w)
-}
 
-beta.w.turnover=function(site.by.species="",sitenum1="",sitenum2= "",pairwise= FALSE){
+beta.w=function(site.by.species="",sitenum1="",sitenum2= "",pairwise= FALSE){
+  
   if (pairwise == TRUE){
     if (sitenum1 == "" | sitenum2 == "") {
       print("Error: please specify sites to compare") 
