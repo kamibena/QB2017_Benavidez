@@ -125,9 +125,9 @@ a.  Describe how local richness ($\alpha$) and turnover ($\beta$) contribute to 
 b.  Is the fish assemblage at site 1 more similar to the one at site 2 or site 10?
 c.  Using your understanding of the equation $\beta_{w} = \gamma/\alpha$, how would your interpretation of $\beta$ change if we instead defined beta additively (i.e., $\beta = \gamma - \alpha$)?
 
-> ***Answer 3a***:  
-> Answer 3b***: The fish assemblage at site 2 is more similar to site 1 than site 10.  
-> Answer 3c***:  If beta was defined additively, you would get a lower beta value.  So, you would interpret beta as the difference between gamma and alpha.
+> Answer 3a***: Alpha diversity  contributes a variety of diversity of several locations while beta turnover describes how this diversity changes from location to location.  Together these estimate describe gamma diversity, the diversity of the region which includes all possible locations.
+> Answer 3b***: The fish assemblage between site 1 and 2 (dissimalarity = 0.5) were more similar than between sites 1 and 10 (dissimalarity = 0.71).
+> Answer 3c***:  If beta was defined additively, you would get a much higher beta value.  For turnover, you would get a value well outside the range of 0 - 1.  Intrepeting this would not be as straight forward as using the ratios.
 
 ### The Resemblance Matrix
 In order to quantify $\beta$-diversity for more than two samples, we need to introduce a new primary ecological data structure: the **Resemblance Matrix**. 
@@ -162,7 +162,7 @@ a. Does the resemblance matrix (`fish.db`) represent similarity or dissimilarity
 b. Compare the resemblance matrices (`fish.db` or `fish.ds`) you just created. How does the choice of the Sørensen or Bray-Curtis distance influence your interpretation of site (dis)similarity?
 
 > Answer 5a***:  This matrix represents dissimlarity.  You can deduce this from the relationship of a species to itself equalling zero.  This means that something is 0% different from itself (which makes perfect sense!). 
-> Answer 5b***:  The abundance-based matrix seems to generate more dissimilarity.
+> Answer 5b***:  The abundance-based matrix seems to generate more dissimilarity that in incidence matrix.
 
 ## 4) VISUALIZING BETA-DIVERSITY
 
@@ -441,3 +441,4 @@ mtext("Variation Partitioning of\nDoubs Fish Diversity", side = 3, line = -3)
 
 ## SYNTHESIS
 Load the dataset you are using for your project. Perform an ordination to visualize your dataset.  Using this ordination, develop some hypotheses relevant to $\beta$-diversity and identify the appropriate tools you would use to test them.
+> Ran a PCoA on 5/7 sites we plan to compare.  Two have some NA/NaN/Inf errors so we need to fix those matrices. Clustering was continuous and had a quadratic pattern.  For all year, PCoA 1 explained ~63% and PCoA 2 explained ~20%.  For this project we will need to learn how to analyze time series data.  
