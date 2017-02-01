@@ -1,8 +1,10 @@
 ---
-title: "Assignment: Among Site (Beta) Diversity"
-author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
+title: 'Assignment: Among Site (Beta) Diversity'
+author: 'Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University'
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  html_document: default
+  pdf_document: default
 geometry: margin=2.54cm
 ---
 
@@ -45,8 +47,13 @@ In the R code chunk below, provide the code to:
 ```{r}
 rm(list=ls())
 getwd()
-setwd("~/GitHub/QB2017_Benavidez/Week3-Beta")
+setwd("C:/Users/Michelle/GitHub/QB2017_Benavidez/Week3-Beta")
 require("vegan")
+require("ade4")
+require("BiodiversityR")
+require("gplots")
+require("viridis")
+require("indicspecies")
 ```
 
 ## 2) LOADING DATA
