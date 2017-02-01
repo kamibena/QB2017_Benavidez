@@ -68,7 +68,7 @@ a.  How many objects are in `doubs`?
 b.  How many fish species are there in the `doubs` dataset? 
 c.  How many sites are in the `doubs` dataset? 
 
-> Answer 1a***: Four objects
+> Answer 1a***: Four objects (env, fish, xy, species)
 > Answer 1b***: 27 fish species 
 > Answer 1c***: 30 sites
 
@@ -80,8 +80,8 @@ a.  How does fish richness vary along the sampled reach of the Doubs River?
 b.  How does Brown Trout (*Salmo trutta*) abundance vary along the sampled reach of the Doubs River?
 c.  What do these patterns say about the limitations of using richness when examining patterns of biodiversity?
 
-> Answer 2a***:  Richness seems to decease as you move from downstream to upstream.
-> Answer 2b***:  Abundance of brown trout seems to increase as you move from downstream to upstream.
+> Answer 2a***:  Richness seems to increase as you move upstream to downstream.
+> Answer 2b***:  Abundance of brown trout seems to decrease as you more upstream to downstream.
 > Answer 2c***:  Examining richness alones many be limited because it does a poor job of describing patterns in abundace.  Downstream you have many species with low abundances while upstream you have few species at high abundances.
 
 ## 3) QUANTIFYING BETA-DIVERSITY
@@ -125,7 +125,7 @@ a.  Describe how local richness ($\alpha$) and turnover ($\beta$) contribute to 
 b.  Is the fish assemblage at site 1 more similar to the one at site 2 or site 10?
 c.  Using your understanding of the equation $\beta_{w} = \gamma/\alpha$, how would your interpretation of $\beta$ change if we instead defined beta additively (i.e., $\beta = \gamma - \alpha$)?
 
-> Answer 3a***: Alpha diversity  contributes a variety of diversity of several locations while beta turnover describes how this diversity changes from location to location.  Together these estimate describe gamma diversity, the diversity of the region which includes all possible locations.
+> Answer 3a***: Alpha diversity contributes the diversity of several individual locations while beta turnover describes how alpha diversity changes from location to location.  Together, alpha and beta describe gamma diversity, the diversity of the region which includes all possible locations.
 > Answer 3b***: The fish assemblage between site 1 and 2 (dissimalarity = 0.5) were more similar than between sites 1 and 10 (dissimalarity = 0.71).
 > Answer 3c***:  If beta was defined additively, you would get a much higher beta value.  For turnover, you would get a value well outside the range of 0 - 1.  Intrepeting this would not be as straight forward as using the ratios.
 
@@ -161,7 +161,7 @@ fish.ds
 a. Does the resemblance matrix (`fish.db`) represent similarity or dissimilarity? What information in the resemblance matrix led you to arrive at your answer? 
 b. Compare the resemblance matrices (`fish.db` or `fish.ds`) you just created. How does the choice of the Sørensen or Bray-Curtis distance influence your interpretation of site (dis)similarity?
 
-> Answer 5a***:  This matrix represents dissimlarity.  You can deduce this from the relationship of a species to itself equalling zero.  This means that something is 0% different from itself (which makes perfect sense!). 
+> Answer 5a***:  This matrix represents dissimlarity.  You can deduce this from the relationship of a species to itself equalling zero.  This means that something is 0% different from itself (which makes perfect sense). 
 > Answer 5b***:  The abundance-based matrix seems to generate more dissimilarity that in incidence matrix.
 
 ## 4) VISUALIZING BETA-DIVERSITY
@@ -200,7 +200,7 @@ gplots::heatmap.2(as.matrix(fish),distfun=function(x) vegdist(x,method="bray"),
 
 ***Question 6***: Based on cluster analyses and the introductory plots that we generated after loading the data, develop an ecological hypothesis for fish diversity the `doubs` data set? 
 
-> Answer 6***: Due to some environmental factor, some species of fish prefer and/or are limited to particular parts of the river.  Along the river gradient there seems to be four clusterings, with one clustering being particularly different from the other three.
+> Answer 6***: Due to some (possibly environmental) factor, some species of fish prefer and/or are limited to particular parts of the river.  Along the river gradient there seems to be four clusterings, with one clustering being particularly different from the other three.  If some species of fish are sensitive to water quality, then perhaps the river possess of gradient of water quality levels.
 
 ### C.  Ordination
 
@@ -292,7 +292,7 @@ summary(phi)
 
 ***Question 8***: Based on the PERMANOVA, IndVal, and phi coefficient analyses, what did you learn about the relationship between habitat quality and the fish species composition?
 
-> Answer 8***: Habitat quality has a significant affect on fish species composition and quality account for approixmately 45.8% of fish species composition is explained by habitat quality.  However, individual species are grouped together differently depending on the type of test used (IndVal vs. phi coefficient).  In both cases, however, some fish are group together in a LQ/MQ.
+> Answer 8***: Habitat quality has a significant affect on fish species composition and approixmately 45.8% of fish species composition is explained by habitat quality.  However, individual species are grouped together differently depending on the type of test used (IndVal vs. phi coefficient).  In both cases, however, some fish are group together in a LQ/MQ.
 
 
 ### B.  Multivariate Procedures for Continuous Designs
@@ -311,7 +311,7 @@ mantel(fish.dist,env.dist)
 
 ***Question 9***: What do the results from our Mantel test suggest about fish diversity and stream environmental conditions? How does this relate to your hypothesis about stream quality influencing fish communities?
 
-> Answer 9***:  The Mantel test indicates that there is a moderately strong (Mantel r = 0.60) correlation between fish species composition and environmetnal variability.  This relates to the hypothesis about stream quality because it could mean that the type and abundance fo fish that change as a result of environmental variables may be related to the quality of the water.
+> Answer 9***:  The Mantel test indicates that there is a moderately strong (Mantel r = 0.60) correlation between fish species composition and environmetnal variability.  This relates to the hypothesis about stream quality because it could mean that the change in fish assemblage along the river may be related to the quality of the water.
 
 ### ii.  Constrained Ordination
 In the R code chunk below, do the following:  
@@ -441,4 +441,4 @@ mtext("Variation Partitioning of\nDoubs Fish Diversity", side = 3, line = -3)
 
 ## SYNTHESIS
 Load the dataset you are using for your project. Perform an ordination to visualize your dataset.  Using this ordination, develop some hypotheses relevant to $\beta$-diversity and identify the appropriate tools you would use to test them.
-> Ran a PCoA on 5/7 sites we plan to compare.  Two have some NA/NaN/Inf errors so we need to fix those matrices. Clustering was continuous and had a quadratic pattern.  For all year, PCoA 1 explained ~63% and PCoA 2 explained ~20%.  For this project we will need to learn how to analyze time series data.  
+> Ran a PCoA on 5/7 sites we plan to compare.  Two have some NA/NaN/Inf errors so we need to fix those matrices. Clustering was continuous and all had a quadratic pattern.  For all years, PCoA 1 explained ~63% and PCoA 2 explained ~20%.  However, there was some variation across years and I suspect that rainfall patterns over the years (i.e. El Nino years vs. drier years) have likely affected tree diversity in some way over the ~20 years.   For this project, we will need to learn how to analyze time series data.  Additionally, it will be hepful to obtain rainfall data for the years censused to see if there is a noticable change depending on percipitation.
