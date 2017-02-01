@@ -80,9 +80,9 @@ a.  How does fish richness vary along the sampled reach of the Doubs River?
 b.  How does Brown Trout (*Salmo trutta*) abundance vary along the sampled reach of the Doubs River?
 c.  What do these patterns say about the limitations of using richness when examining patterns of biodiversity?
 
-> Answer 2a***:  Richness seems to increase as you move upstream to downstream.
-> Answer 2b***:  Abundance of brown trout seems to decrease as you more upstream to downstream.
-> Answer 2c***:  Examining richness alones many be limited because it does a poor job of describing patterns in abundace.  Downstream you have many species with low abundances while upstream you have few species at high abundances.
+> Answer 2a***:  Richness seems to increase as you move from upstream to downstream.
+> Answer 2b***:  Abundance of brown trout seems to decrease as you move from upstream to downstream.
+> Answer 2c***:  Examining richness alone many be limited because it does a poor job of describing patterns in abundace along gradients.  Downstream you have many species with low abundances while upstream you have few species at high abundances.  Understading how composition changes in space is important for understading the pattern of change related to the environment.
 
 ## 3) QUANTIFYING BETA-DIVERSITY
 
@@ -117,6 +117,11 @@ else{
   return(b.w)
   }
 }
+
+fishdf=as.data.frame(doubs$fish)
+beta.w(fishdf,1,2,T)
+beta.w(fishdf,1,10,T)
+beta.w(fishdf)
 ```
 
 ***Question 3***: Using your `beta.w()` function above, answer the following questions:
