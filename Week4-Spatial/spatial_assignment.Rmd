@@ -39,7 +39,7 @@ In the R code chunk below, provide the code to:
 ```{r, results = 'hide'}
 rm(list=ls())
 getwd()
-setwd("/Users/kamibena/GitHub/QB2017_Benavidez/Week4-Spatial")
+setwd("C:/Users/Michelle/GitHub/QB2017_Benavidez/Week4-Spatial")
 ```
 
 ## 2) LOADING R PACKAGES
@@ -75,11 +75,11 @@ OTUs=as.data.frame(OTUs[-1])
 
 ***Question 2a***:  How many sites and OTUs are in the SiteBySpecies matrix? 
 
-> ***Answer 2a***:  
+> ***Answer 2a***:  51 sites and 16383 OTUs
 
 ***Question 2b***:  What is the greatest species richness found among sites?
 
-> ***Answer 2b***:  
+> ***Answer 2b***:  16383
 
 
 ## 4) GENERATE MAPS
@@ -100,7 +100,7 @@ PlotOnStaticMap(newmap,lats,lons,cex=1,pch=20,col='red',add=T)
 
 ***Question 3***:  Briefly describe the geographical layout of our sites.
 
-> ***Answer 3***:  
+> ***Answer 3***:  Sites are all located witin Brown County State Park.  They are patterned in four distinct clusters with a few outliers around Monroe Lake.  Two of the groups are located closer to the edge of the park while the other two are located closer to the park's center.
 
 
 In the R code chunk below, do the following:  
@@ -130,21 +130,21 @@ plot(Refuge.Ponds,line='r',col='red',pch=20,cex=1.5,add=T)
 
 ***Question 4a***: What are datums and projections?
 
-> ***Answer 4a***:  
+> ***Answer 4a***:  A datum is basically a point of refernce on the globe that the projection uses to plot the reference point on a 2D map.
 
 
 ## 5) UNDERSTANDING SPATIAL AUTOCORRELATION
 
 ***Question 5***: In your own words, explain the concept of spatial autocorrelation.
 
-> ***Answer 5***:
+> ***Answer 5***:  The internal correlation of a variable through space.  In other words, it is a measure of how much a viable correlates with itself over space.
 
 
 ## 6) EXAMINING DISTANCE-DECAY
 
 ***Question 6***: In your own words, explain what a distance decay pattern is and what it reveals.
 
-> ***Answer 6***:
+> ***Answer 6***:  The distance-decay pattern 
 
 In the R code chunk below, do the following:  
 
@@ -274,7 +274,7 @@ Many patterns of biodiversity relate to spatial scale.
 
 ***Question 10***: In your own words, describe the species-area relationship.
 
-> ***Answer 10***: 
+> ***Answer 10***: Typically, as you look over larger and larger areas of land/habitat you will discover more species.  This relationship can be visualized as the species-area curve, which quantifies this phenomenon. 
 
 
 In the R code chunk below, provide the code to: 
@@ -313,7 +313,6 @@ While consult the handout for assistance, in the R chunk below, provide the code
 ```{r}
 
 par(mfrow=c(1, 2), pty="s")
-# 1. Declare the spatial extent and lists to hold species richness and area data
 community=c()
 species=c()
 
@@ -321,11 +320,6 @@ plot(0, 0, col='white', xlim = c(0, 100), ylim = c(0, 100),
      xlab='x coordinate', ylab='y coordinate', 
 main='A simulated landscape occupied by 100
 species, having 1 to 1000 individuals each.')
-
-
-
-# 2. Construct a 'while' loop and 'for' loop combination to quantify the numbers of species for progressively larger areas of the simulated landscape.
-
 while (length(community) < 100){
   std <- runif(1, 1, 10)
   ab <- sample(1000, 1)
@@ -338,7 +332,38 @@ while (length(community) < 100){
   community[[length(community)+1]] <- species 
 }
 
+# 1. Declare the spatial extent and lists to hold species richness and area data
+
+lim=10
+S.list=c()
+A.list=c()
+
+
+# 2. Construct a 'while' loop and 'for' loop combination to quantify the numbers of species for progressively larger areas of the simulated landscape.
+
+while (lim <= 100){
+  S <- 0
+  for (sp in community){
+    xs <- sp[[1]]
+    ys <- sp[[2]]
+    sp.name <- sp[[3]]
+    xy.coords <- cbind(xs, ys)
+    for (xy in xy.coords){
+      if (max(xy) <= lim){
+        S <- S + 1
+        break
+      }
+    }
+  }
+  S.list <- c(S.list, log10(S))
+  A.list <- c(A.list, log10(lim^2))
+  lim <- lim * 2
+}
+
 # 3. Be sure to log10-transform the richness and area data
+# This portion was done in the last few lines of the while loop above.
+
+
 
 ```
 
@@ -350,17 +375,25 @@ In the R code chunk below, provide the code to:
 3. Add a legend for the z-value (i.e., slope of the SAR)
 
 ```{r, results = 'hide', message = FALSE, warning = FALSE}
-
+results <- lm(S.list ~ A.list)
+plot(A.list, S.list, col="dark red", pch=20, cex=2,
+     main="Species-area relationship",
+     xlab='ln(Area)', ylab='ln(Richness)')
+abline(results, col="red", lwd=2)
+int <- round(results[[1]][[1]],2)
+z <- round(results[[1]][[2]],2)
+legend(x=2, y=2, paste(c('slope = ', z), collapse = " "), cex=0.8,
+       box.lty=0)
 ```
 
 
 ***Question 10a***: Describe how richness relates to area in our simulated data by interpreting the slope of the SAR.
 
-> ***Answer 10a***: 
+> ***Answer 10a***: There is a positive relationship between species richness and area, so as the area of the land increases species richness increases as well.
 
 ***Question 10b***: What does the y-intercept of the SAR represent?
 
-> ***Answer 10b***: 
+> ***Answer 10b***: The Y-intercept represents the log transformed values of species richness in a given area of the dataset.
 
 
 ## SYNTHESIS
