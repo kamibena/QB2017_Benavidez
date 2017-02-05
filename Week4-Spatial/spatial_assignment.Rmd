@@ -1,8 +1,10 @@
 ---
-title: "Assignment: Spatial Diversity"
-author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
+title: 'Assignment: Spatial Diversity'
+author: 'Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University'
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  pdf_document: default
+  word_document: default
 geometry: margin=2.54cm
 ---
 
@@ -39,7 +41,7 @@ In the R code chunk below, provide the code to:
 ```{r, results = 'hide'}
 rm(list=ls())
 getwd()
-setwd("C:/Users/Michelle/GitHub/QB2017_Benavidez/Week4-Spatial")
+setwd("~/GitHub/QB2017_Benavidez/Week4-Spatial")
 ```
 
 ## 2) LOADING R PACKAGES
@@ -49,13 +51,22 @@ In the R code chunk below, do the following:
 1. Install and/or load the following packages: `vegan`, `sp`, `gstat`, `raster`, `RgoogleMaps`, `maptools`, `rgdal`, `simba`, `gplots`, `rgeos`
 
 ```{r, results = 'hide', message = FALSE, warning = FALSE} 
-install.packages(c("vegan", "sp", "gstat", "raster", "RgoogleMaps", "maptools", "rgdal", "simba", "gplots", "rgeos"))
-require(c("vegan", "sp", "gstat", "raster", "RgoogleMaps", "maptools", "rgdal", "simba", "gplots", "rgeos"))
+
+require("vegan")
+require("sp")
+require("gstat")
+require("raster")
+require("RgoogleMaps")
+require("maptools")
+require("rgdal")
+require("simba")
+require("gplots") 
+require("rgeos")
 ```
 
 ***Question 1***:  What are the packages `simba`, `sp`, and `rgdal` used for?
 
-> ***Answer 1***:
+> ***Answer 1***:  The 'simba' is used for calculating and processing similarity data (for binary data) and reshaping data into matrices.  The 'sp' package is for analying spatial data, such as map plotting, coordinate retrieving etc...  The 'rgdal' package is used for spatial mapping.  It provides bindings to the Frank Warmerdam's Geospatial Data Abstraction Library (software for reading raster and otehr geospatial files) and the PROJ.4 library (UNIX based library tthat converts between lat/long and cartesian coordinates).    
 
 
 ## 3) LOADING DATA
@@ -144,7 +155,7 @@ plot(Refuge.Ponds,line='r',col='red',pch=20,cex=1.5,add=T)
 
 ***Question 6***: In your own words, explain what a distance decay pattern is and what it reveals.
 
-> ***Answer 6***:  The distance-decay pattern 
+> ***Answer 6***:  The distance-decay pattern describes the diminishing interactions as two species/places/things of interest become more spatially distant.
 
 In the R code chunk below, do the following:  
 
@@ -217,14 +228,14 @@ diffslope(env, struc, dist, struc)
 
 ***Question 7***: What can you conclude about community similarity with regars to environmental distance and geographic distance?
 
-> ***Answer 7***: 
+> ***Answer 7***: There is a slight negative relationship between community similarity and environmental distance, but the community stay relatively stable over geographic distance.  Accoutning for both simultaneouly, there is a significant slope (p < 0.001) that shows for every unit of change, species composition decreases by 0.17%
 
 
 ## 7) EXAMINING SPECIES SPATIAL ABUNDANCE DISTRIBUTIONS
 
 ***Question 8***: In your own words, explain the species spatial abundance distribution and what it reveals.
 
-> ***Answer 8***:
+> ***Answer 8***: The species spatial abundance distrbution describes how individual organisms are arranged in a given landscape.  It can inform us about the rate and abundances at which you might encounter organisms in that particular space.
 
 
 In the R code chunk below, do the following: 
@@ -243,18 +254,18 @@ ssad=function(x){
 }
 
 # 2. Set plot parameters
-par(mfrow=c(2, 2))
+par(mfrow=c(2, 3))
 
 # 3. Declare a counter variable
 ct=0
 
 # 4. Write a while loop to plot the SSADs of six species chosen at random 
-while(ct<4){
+while(ct<6){
   otu=sample(1:length(OTUs),1)
   ad=ssad(otu)
   if(length(ad)>10&sum(ad>100)){
     ct=ct+1
-    plot(density(ad),col='red',xlab='Site Abundane',
+    plot(density(ad),col='red',xlab='Site Abundance',
          ylab='Probability Density',main=otu.names[otu])
     }
 }
@@ -267,7 +278,7 @@ Many patterns of biodiversity relate to spatial scale.
 
 ***Question 9***:  List, describe, and give examples of the two main aspects of spatial scale
 
-> ***Answer 9***: 
+> ***Answer 9***: Two main aspects: Extent, Grain.  Extent describes the greatest distance in a given study area. Grain, on the other hand, is the smallest distance in a given study area. For example if you are measuring biodiversity in a 20ha plot the extent is 20ha.  If you were measuring diversity per hectare in that 20ha plot, then 1ha would be the grain of that study.  As another example, if you were measuring diversity along 100km interstate and had that study site partitioned into 0.25km plots, then the extent is 100km and the grain is 0.25km.  
 
 
 ## 9) CONSTRUCTING THE SPECIES-AREA RELATIONSHIP
@@ -281,7 +292,7 @@ In the R code chunk below, provide the code to:
 
 1. Simulate the spatial distribution of a community with 100 species, letting each species have between 1 and 1,000 individuals.
 
-```{r, results = 'hide', message = FALSE, warning = FALSE}
+```{r}
 
 par(mfrow=c(2,2))
 
@@ -299,10 +310,10 @@ y3 <- rnorm(10000, mean = mn, sd =sd)
 x4 <- rnorm(10000, mean = mn, sd =sd)
 y4 <- rnorm(10000, mean = -mn, sd =sd)
 
-plot(x,y, xlim=c(-4, 4), ylim=c(-6, 6), pch=".", cex=2, col='Steelblue') 
-plot(x,y, xlim=c(-2, 2), ylim=c(-2, 2), pch=".", cex=2,col='Steelblue') 
-plot(x,y, xlim=c(-1, 1), ylim=c(-1, 1), pch=".", cex=2,col='Steelblue') 
-plot(x,y, xlim=c(-0.5, 0.5), ylim=c(-0.5, 0.5), pch=".", cex=2, col='Steelblue')
+plot(x1,y1, xlim=c(-4, 4), ylim=c(-6, 6), pch=".", cex=2, col='Steelblue') 
+plot(x2,y2, xlim=c(-2, 2), ylim=c(-2, 2), pch=".", cex=2,col='Steelblue') 
+plot(x3,y3, xlim=c(-1, 1), ylim=c(-1, 1), pch=".", cex=2,col='Steelblue') 
+plot(x4,y4, xlim=c(-0.5, 0.5), ylim=c(-0.5, 0.5), pch=".", cex=2, col='Steelblue')
 ```
 
 While consult the handout for assistance, in the R chunk below, provide the code to: 
@@ -363,8 +374,6 @@ while (lim <= 100){
 # 3. Be sure to log10-transform the richness and area data
 # This portion was done in the last few lines of the while loop above.
 
-
-
 ```
 
 
@@ -398,3 +407,9 @@ legend(x=2, y=2, paste(c('slope = ', z), collapse = " "), cex=0.8,
 
 ## SYNTHESIS
 Load the dataset you are using for your project. Plot and discuss either the geogrpahic Distance-Decay relationship, the SSADs for at least four species, or any variant of the SAR (e.g., random accumulation of plots or areas, accumulation of contiguous plots or areas, nested design).
+
+> For this portion of the assignment I have looked at SSADs for six speices during one year (2005) of our time series data.  I had to adjust the 'if' part of the loop compared to our homework activity as there were not many species in the dataset that met that criteria.  From the adjusted numbers is would seem as if there might be a small collection of abundant species, but most are rare.  There is definitely some differences in density probabilites between the species. 
+
+![Image of SSADs for six random species in BCI during 2005](Rplot.tiff)
+
+
