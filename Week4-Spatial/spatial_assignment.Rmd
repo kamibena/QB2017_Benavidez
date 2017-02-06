@@ -41,7 +41,7 @@ In the R code chunk below, provide the code to:
 ```{r, results = 'hide'}
 rm(list=ls())
 getwd()
-setwd("~/GitHub/QB2017_Benavidez/Week4-Spatial")
+setwd("C:/users/Michelle/GitHub/QB2017_Benavidez/Week4-Spatial")
 ```
 
 ## 2) LOADING R PACKAGES
@@ -408,8 +408,8 @@ legend(x=2, y=2, paste(c('slope = ', z), collapse = " "), cex=0.8,
 ## SYNTHESIS
 Load the dataset you are using for your project. Plot and discuss either the geogrpahic Distance-Decay relationship, the SSADs for at least four species, or any variant of the SAR (e.g., random accumulation of plots or areas, accumulation of contiguous plots or areas, nested design).
 
-> For this portion of the assignment I have looked at SSADs for six speices during one year (2005) of our time series data.  I had to adjust the 'if' part of the loop compared to our homework activity as there were not many species in the dataset that met that criteria.  From the adjusted numbers is would seem as if there might be a small collection of abundant species, but most are rare.  There is definitely some differences in density probabilites between the species. 
+> For this portion of the assignment I have looked at SSADs for six speices during one year (2005) of our time series data.  I had to adjust the 'if' part of the loop compared to our homework activity as there were not many species in the dataset that met that criteria.  From the adjusted numbers is would seem as if there might be a small collection of abundant species, but most are rare.  There is definitely some differences in density probabilites between the species. Figuremage below.
 
-![Image of SSADs for six random species in BCI during 2005](Rplot.tiff)
+![SSADs for six random tree species from a 50 hectare plot in BCI during 2005](Rplot.tiff)
 
 
