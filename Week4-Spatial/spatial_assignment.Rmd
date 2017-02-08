@@ -3,6 +3,7 @@ title: 'Assignment: Spatial Diversity'
 author: 'Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University'
 date: '`r format(Sys.time(), "%d %B, %Y")`'
 output:
+  html_document: default
   pdf_document: default
   word_document: default
 geometry: margin=2.54cm
