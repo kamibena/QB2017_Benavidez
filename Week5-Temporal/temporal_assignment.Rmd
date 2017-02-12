@@ -46,7 +46,7 @@ In the R code chunk below, provide the code to:
 
 ```{r}
 
-<<<<<<< HEAD
+
 rm(list=ls())
 getwd() 
 setwd("~/GitHub/QB2017_Benavidez/Week5-Temporal/")
@@ -62,11 +62,7 @@ for (package in package.list) {
     library(package, character.only = TRUE) 
     }
 }
-=======
 
-
-
->>>>>>> upstream/master
 ```
 
 ## 2) LOADING DATA
@@ -77,15 +73,12 @@ In the R code chunk below, do the following:
 2. explore the structure of the dataset.
 
 ```{r}
-<<<<<<< HEAD
+
 portal <- read.table("data/combined.csv", sep = ",", header = TRUE)
 summary(portal)
-=======
 
+portal=portal[!(portal$taxa %in% c("Bird","Rabbit","Reptile")),]
 
-
-
->>>>>>> upstream/master
 ```
 
 ***Question 1***:  Describe some of the attributes of the `portal` dataset.  
@@ -93,13 +86,10 @@ summary(portal)
 a.  How many plots are in `portal`?
 b.  How many rodent species are there in the `portal` dataset?
 
-<<<<<<< HEAD
+
 > ***Answer 1a***:  24 plots are present  
-> ***Answer 1b***:  After discounting lizards and birds, 29 species of rodents are present - five of these are entered as 'sp' (i.e. Dipodomys sp.), so there is a possibility there are more.
-=======
-> ***Answer 1a***:  
-> ***Answer 1b***:  
->>>>>>> upstream/master
+> ***Answer 1b***:  After discounting lizards, birds, and rabbits, 29 species of rodents are present - five of these are entered as 'sp' (i.e. Dipodomys sp.), so there is a possibility there are more.
+
 
 ## 3) WRANGLING THE PORTAL DATASET
 
@@ -112,25 +102,22 @@ In the R code chunk below, do the following:
 5. Using the hypothesis testing tools you learned in the beta-diversity module, test the hypothesis that species abundances across sites vary as a factor of treatment type (i.e., plot_type). 
 
 ```{r}
-<<<<<<< HEAD
+
 portal <- unite(portal, col = date, c(year, month, day), sep = "-", remove = FALSE)
 portal <- unite(portal, col = taxon, c(genus, species), sep = "_", remove = FALSE)
 
 time.by.species <- group_by(portal,year,plot_id) %>%
   count(taxon) %>% spread(key=taxon,value=n,fill=0)
 
-dplyr::filter(time.by.species,year==1984)
-dplyr::filter(time.by.species,plot_id==5)
+dplyr::filter(time.by.species,year==1981, plot_id==6)
+dplyr::filter(time.by.species,plot_id==6)
 
-tbs.1981 <- group_by(portal,year,plot_id) %>%
-  count(taxon) %>% spread(key=taxon,value=n,fill=0)
+tbs.1981 <- time.by.species[93:116,]
 
-time.by.species.1981 <- as.data.frame(tbs.1981[93:116,])
-tbs1981=time.by.species.1981[,3:50]
 
-diversity(tbs1981,"simp")
+diversity(tbs.1981,"simp")
 
-tbs1981.db=vegdist(tbs1981,method="bray")
+tbs1981.db=vegdist(tbs.1981,method="bray")
 
 rodent.pcoa=cmdscale(tbs1981.db,eig=T, k=3)
 explainvar1=round(rodent.pcoa$eig[1] / sum(rodent.pcoa$eig), 3) * 100
@@ -152,16 +139,17 @@ points(rodent.pcoa$points[ ,1], rodent.pcoa$points[ ,2],
 text(rodent.pcoa$points[ ,1], rodent.pcoa$points[ ,2], 
      labels = row.names(rodent.pcoa$points))
 
-rodentREL=rodent
+rodentREL=tbs.1981
 
-  for(i in 1:nrow(rodent)){
-    rodentREL[i, ] = rodent[i, ] / sum(rodent[i, ]) 
+  for(i in 1:nrow(tbs.1981)){
+    rodentREL[i, ] = tbs.1981[i, ] / sum(tbs.1981[i, ]) 
   }
 rodent.pcoa=add.spec.scores(rodent.pcoa,rodentREL,method = "pcoa.scores") 
 text(rodent.pcoa$cproj[ ,1], rodent.pcoa$cproj[ ,2],
      labels = row.names(rodent.pcoa$cproj), col = "black")
-=======
->>>>>>> upstream/master
+
+
+
 
 ```
 
@@ -184,7 +172,7 @@ In the R code chunk below, do the following:
 6. Use the tools outlined in the Handout to create an ARMA model.
 
 ```{r}
-<<<<<<< HEAD
+
 time.by.spec.2 <- filter(portal, taxa=="Rodent") %>%
   group_by(year,month, plot_id) %>%
   count(taxon)
@@ -196,7 +184,7 @@ time.by.spec.2$season <- ifelse(time.by.spec.2$season == TRUE, "rain", "norain")
 
 group_by(time.by.spec.2, year, season)
 
-abund <- filter(time.by.spec.2, plot_id == 3) %>% 
+abund <- filter(time.by.spec.2, plot_id == 24) %>% 
   group_by(year, season) %>%
   count(wt = n)
 
@@ -260,20 +248,19 @@ tsdiag(abund.arm)
 
 pred.arm <- predict(abund.arm, n.ahead = 20)
 ts.plot(abund.ts, pred.arm$pred, lty = c(1,3))
-=======
->>>>>>> upstream/master
+
 
 ```
 
 ***Question 3***: Describe the results from your time series analysis.
 
 a. Does your data meet the assumption of stationarity? If not, what does this violation imply?
-b. What does the ACF function do and how does it relate to the ARMA model? How does this differ from the autocorrelation function (ACF)?
+b. What does the ACF function do and how does it relate to the ARMA model? How does this differ from PACF?
 c. What results can you conclude from your full ARMA model along with other methods outlined in the time series setcion of the Handout?
 
-> ***Answer 3a***:
-> ***Answer 3b***:
-> ***Answer 3c***:
+> ***Answer 3a***:  The data did not meet the assumption of similarity based on the Dicky-Fuller test (p = 0.25).  Hoever, after differencing the time series, it did meet the assumption of stationarity (p < 0.05).
+> ***Answer 3b***:  ACF is the autocorreltion function and it lets the researcher determines correltion that may be inconspicuously located time series intervals.  This relates to the ARMA models because it can help paramatize the model so it can generate more informative forcasts.  Unlike AFC which looks for lagtime correlations arcoss the data, PACF looks for correlation lagtimes between two time intervals.  Essentially, the AFC measures autocorrelation in the 'MA' (moving average) portion of the ARMA models and PACF measure autocorrelation in the 'AF' (autoreggresive) portion of the model.
+> ***Answer 3c***:  Based on the model conclusions, rodent abundance increased after the plot was established then steadily decresaed and will likely stablize at a relatively low density through the future.
 
 ## 5) REPEATED MEASURES ANALYSIS OF VARIANCE (RM-ANOVA)
 In the R code chunk below, do the following:  
@@ -284,7 +271,7 @@ In the R code chunk below, do the following:
 
 ```{r}
 
-<<<<<<< HEAD
+
 ##Wrangling data
 # time-by-species matrix
 time.by.species <- group_by(portal, year, plot_id,
@@ -323,6 +310,7 @@ rich.plot <- ggplot(rich.treat.plot, aes(x = year, y = mean, color = plot_type))
 
 plot(rich.plot)
 
+#autoregressive
 rich.rm <- lme(richness ~ plot_type * year, random = ~ 1 | plot_id,
                correlation = corAR1(form = ~ 1 | plot_id),
                data = rich.treat)
@@ -333,9 +321,30 @@ set.caption("RMANOVA for Portal")
 pander(anova(rich.rm))
 
 lsmeans(rich.rm, ~plot_type)
-=======
 
->>>>>>> upstream/master
+#unstructured
+rich.rm <- lme(richness ~ plot_type * year, random = ~ 1 | plot_id,
+               correlation = corSymm(form = ~ 1 | plot_id),
+               data = rich.treat)
+summary(rich.rm)
+anova(rich.rm)
+
+set.caption("RMANOVA for Portal")
+pander(anova(rich.rm))
+
+lsmeans(rich.rm, ~plot_type)
+
+#compound symmetry
+rich.rm <- lme(richness ~ plot_type * year, random = ~ 1 | plot_id,
+               correlation = corCompSymm(form = ~ 1 | plot_id),
+               data = rich.treat)
+summary(rich.rm)
+anova(rich.rm)
+
+set.caption("RMANOVA for Portal")
+pander(anova(rich.rm))
+
+lsmeans(rich.rm, ~plot_type)
 ```
 
 ***Question 4***: Describe the results from your RM-ANOVA.
@@ -345,9 +354,10 @@ b. Is there a noticeable trend in the inverse of Simpson's diversity over time?
 c. What does the result of your F-test tell you? 
 d. Of the three RM-ANOVA models with different covariance structures, which one is best? How does this affect the interpretation of your data?  
 
-> ***Answer 4a***:
-> ***Answer 4b***:
-> ***Answer 4c***:
+> ***Answer 4a***:  It is testing the effect of plot_type, year, and the interaction between plot_type and year on the response variable (rodent richness).  It is basically a regular ANOVA, but for nonindependent groups.  In this example, we are testing for differences in intercept (time) since we don't have an a priori reason to test intercept-slope model.  
+> ***Answer 4b***:  Based on eyeballing the plot, it seems as if there might be a slight increase of richness over time and the two plot types seems to follow the same general trends (however this may be due to environmental changes).
+> ***Answer 4c***:  Plot_type has a significant effect on rodent richness (F = 12.28, df = 1/12, p < 0.01).  Neither year (F = 0.01, df = 1/343, p = 0.93) nor the interaction between year and plot_type (F = 0.45, df = 1/343, p = 0.51) have a significant effect on rodent richness.  Therefore, there is a significant difference in richness over time when you compare full rodent exclosure from a plot and full rodent access to a plot, and this is most fully explained by the plot_type treatment.  In general, based on the F values treatment means only considerably differ between plot types. 
+> ***Answer 4d***: The autoregressive model worked the best.  This would say that 
 
 ## 6) TEMPORAL BETA DIVERSITY
 
@@ -359,7 +369,7 @@ In the R code chunk below, do the following:
 3. Visualize turnover within each group
 
 ```{r}
-<<<<<<< HEAD
+
 portal.species.abunds <- group_by(portal, year, plot_type) %>% count(taxon)
 
 portal.total <- turnover(df = portal.species.abunds,
@@ -400,16 +410,17 @@ turn.plot <- ggplot(
   scale_color_grey()
 
 plot(turn.plot)
-=======
 
->>>>>>> upstream/master
 
 ```
 
 ***Question 5***:
 
-a. How does temporal turnover relate to spatial turnover?
+a. How does temporal turnover relate to spatial turnover?  
 b. Which taxonomic group appears to be the most variable? Which group appears to be the least variable?
+
+> ***Answer 5a***:  Time and space are inherently linked in that changes in space occurr over time.  Therefore, it is imporant to consider temporal and spatial turnover when examining temporal data to better understand how and why your reponse variable is changing.
+> ***Answer 5a***: The taxonomic group that excludes Dypodomys spectabilis is the most variable.  The control treatment is the least variable.
 
 ### Mean Rank Shift
 In the code chunk below, do the following:
@@ -418,10 +429,9 @@ In the code chunk below, do the following:
 2. Plot MRS for each through time. 
 
 ```{r}
-<<<<<<< HEAD
+
 portal.abunds.cont.rodent <- filter(portal.species.abunds,
-                                    plot_type == "Control" | plot_type == "Rodent
-                                    Exclosure")
+                                    plot_type == "Control" | plot_type == "Short-term Krat Exclosure")
 
 portal.rankshift <- rank_shift(
   df = as.data.frame(portal.abunds.cont.rodent),
@@ -445,9 +455,7 @@ group_by(portal.rankshift, plot_type) %>%
   summarise(
     mean = mean(MRS),
     cv = sd(MRS)/mean)
-=======
 
->>>>>>> upstream/master
 ```
 
 ***Question 6***:
@@ -455,8 +463,8 @@ group_by(portal.rankshift, plot_type) %>%
 a. What does a change in the rank shift tell you about the community?
 b. Interpret the analysis and figure you just made.
 
-> ***Answer 6a***:
-> ***Answer 6b***:
+> ***Answer 6a***:  Changes in rank shift provide clues into the potential influence of groups based on rank abundance; therefore it accounts for the influence of rare/abundant species based on their rank.
+> ***Answer 6b***:  It appears as if the presence of Dipodomys spp. had an influence on the on abundance.  On average MRS is higher in the Short-Term Krat enclosure (mean = 1.79) than the control enclosure (mean = 1.40).
 
 ### Rate Change Interval
 In the R code chunk below, do the following:
@@ -465,7 +473,7 @@ In the R code chunk below, do the following:
 2. Plot the results.
 
 ```{r}
-<<<<<<< HEAD
+
 portal.species.abunds$tot.abund <- rep(sum(portal.species.abunds$n),
                                        length(portal.species.abunds$n))
 
@@ -487,8 +495,7 @@ rate.plot <- ggplot(portal.change.int, aes(interval, distance)) +
   xlab("Time Interval (Years)")
 
 rate.plot
-=======
->>>>>>> upstream/master
+
 
 ```
 
@@ -497,8 +504,8 @@ rate.plot
 a. What does it mean to calculate a distance metric across varying time intervals?
 b. Interpret the overall results. Develop a hypothesis based on the different responses of each treatment.
 
-> ***Answer 7a***:
-> ***Answer 7b***:
+> ***Answer 7a***:  We are calculating how probable similarity changes over time.  In this we can develop hypotheses concerning community divergence and which can ultimately inform ecological manamgement and conservation pratices.
+> ***Answer 7b***:  Hellinger distances steadily increased through time for all treatments except for the rodent enclosure, where all rodents were exluded from entry.  Since the rodent enclosure expludes all rodents while the other treatments include at least on species of rodent, then dispersal capabilites great influence community divergence over time.
 
 ## 7) STABILITY
 In the R code chunk below, do the following:  
@@ -508,7 +515,7 @@ In the R code chunk below, do the following:
 3. Test for a biodiversity-stability relationship by regressing community stability on mean inverse Simpson's diversity.
 
 ```{r}
-<<<<<<< HEAD
+
 #community stability
 portal.stab <- community_stability(df = as.data.frame(portal.species.abunds),
                                    time.var = "year",
@@ -585,26 +592,25 @@ abline(div.stab.lm)
 r2 <- bquote(italic(R)^2 == .(format(
   summary(div.stab.lm)$adj.r.square, digits = 3)))
 text(3.25,3.75, cex = 1.5, labels = r2)
-=======
 
->>>>>>> upstream/master
 
 ```
 
 ***Question 8***:
 
 a. Which plot type has the highest stability in total abundance? How is stability of total abundance measured with the function you learned? How does this measure of stability relate to the coefficient of variation?
-
 b. In your own words, describe the concept of synchrony
 c. Interpret the results from the biodiversity-stability relationships you analyzed.
 
-> ***Answer 8a***:
-> ***Answer 8b***:
-> ***Answer 8c***:
+> ***Answer 8a***:  The control plot has the highest stability (stability = 3.04).  Stability with this function is measured by taking the reciprical of the standard deviation over the mean of the variable (in this case abundance).  This relates to the coefficient of variation because this coeffient is simply the standard deviation over the mean of the variable - so, while a higher coefficient of variation equals higher variation, a higher stability value equals less variation.
+> ***Answer 8b***:  Synchrony in the context of this assignment is referring to how the community structure of species responds to varying conditions.  For example, if all species across treatments expreience a reduciton in numbers as a results of a climatical event, then community structure is synchroneous among treatment groups.  If the same climatic event yeilds decresed numbers of some species and not others, then community structure would be considered asynchroneous.
+> ***Answer 8c***:  Across plot types, richness and stability are increasing over time however the correlation is only of moderate strngth (r2 = 0.41).
 
 ## SYNTHESIS
 Compare and contrast the core concepts from temporal and spatial diversity (e.g., autocorrelation, scale, variability, etc.).
 Identify a few of the major challenges associated with studying biodiversity through time and across space.  
 
 > ***Answer***:
+> Autocorrelation between temporal and spatial scales are similar in that they are looking for internal correlative patters, however they are caluculated differently.  Spatially is essentially less complex because it is looking at a single point in time and does not have to account for lag time effects as needs to be considered with temporal autocorrelation.  Scale is also similar between evaluating spatial and temporal data - however, they are referring to two particularly different things.  In spatial analyses scale is referring to the size of the study area - for example, how many square kilometers are needed to caluculate diversity of grasses in central park?  In temoral analyses, lenth of time is the scale - using the same example, how many years should diversity be measured to understand succession of grasses since the contruciton of Central Park?  Variability, like scale, is a similar concept within spatial and temporal diversity but it is estimated in different ways depending on your study.  In spatial ecology variabiliy is measuring a single instance while in temporal ecology isis measuring change in variability over time.  That said, you do need to look at variability of the spaital scope of your temporal analyses in order to look at how that variability changed over time.  Stability is a concept that is only useful for temporal/spatiotemporal studies because it innately implies change over time.  However, turnover can work for both space and time independently - you can look at turnover through years or between sites at a given point in time.
 
+> Studying biodiversity through space and time can be challenging, especially if you want to study make future forcasts.  This is primarily true because it is very difficult to account for all ever-changing variables that might be influencing biodiversity in any given area.  For exmaple, if you are attempting to forcast how diversity and age class of trees in a park will look in the future, how do you account managment practices of the city in which the park is located?  How can you predict if funding will even allow for management?  Furthermore, identifying the appropriate scope of a project is difficult as well - how much/little space and time is necessary to adequatly measure the phenomonon you are attempting to describe?   
