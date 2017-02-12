@@ -42,7 +42,7 @@ In the R code chunk below, provide the code to:
 ```{r, results = 'hide'}
 rm(list=ls())
 getwd()
-setwd("~/GitHub/QB2017_Benavidez/Week4-Spatial")
+setwd("C:/users/Michelle/GitHub/QB2017_Benavidez/Week4-Spatial")
 ```
 
 ## 2) LOADING R PACKAGES
