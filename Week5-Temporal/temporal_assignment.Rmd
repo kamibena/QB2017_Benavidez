@@ -1,6 +1,6 @@
 ---
 title: "Assignment: Temporal Diversity"
-author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
+author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
@@ -44,7 +44,7 @@ In the R code chunk below, provide the code to:
 
 rm(list=ls())
 getwd() 
-setwd("~/GitHub/QB-2017/Week5-Temporal/")
+setwd("~/GitHub/QB2017_Benavidez/Week5-Temporal/")
 
 package.list <- c('vegan', 'tidyr', 'dplyr', 'codyn', 'ggplot2',
                   'cowplot', 'MullerPlot', 'RColorBrewer',
@@ -67,10 +67,8 @@ In the R code chunk below, do the following:
 2. explore the structure of the dataset.
 
 ```{r}
-
 portal <- read.table("data/combined.csv", sep = ",", header = TRUE)
-str(portal)
-head(portal)
+summary(portal)
 ```
 
 ***Question 1***:  Describe some of the attributes of the `portal` dataset.  
@@ -78,8 +76,8 @@ head(portal)
 a.  How many plots are in `portal`?
 b.  How many rodent species are there in the `portal` dataset?
 
-> ***Answer 1a***:  
-> ***Answer 1b***:  
+> ***Answer 1a***:  24 plots are present  
+> ***Answer 1b***:  After discounting lizards and birds, 29 species of rodents are present - five of these are entered as 'sp' (i.e. Dipodomys sp.), so there is a possibility there are more.
 
 ## 3) WRANGLING THE PORTAL DATASET
 
@@ -100,8 +98,45 @@ time.by.species <- group_by(portal,year,plot_id) %>%
 
 dplyr::filter(time.by.species,year==1984)
 dplyr::filter(time.by.species,plot_id==5)
-93:116
-time.by.species.1981 <- as.data.frame(time.by.species[93:116,])
+
+tbs.1981 <- group_by(portal,year,plot_id) %>%
+  count(taxon) %>% spread(key=taxon,value=n,fill=0)
+
+time.by.species.1981 <- as.data.frame(tbs.1981[93:116,])
+tbs1981=time.by.species.1981[,3:50]
+
+diversity(tbs1981,"simp")
+
+tbs1981.db=vegdist(tbs1981,method="bray")
+
+rodent.pcoa=cmdscale(tbs1981.db,eig=T, k=3)
+explainvar1=round(rodent.pcoa$eig[1] / sum(rodent.pcoa$eig), 3) * 100
+explainvar2=round(rodent.pcoa$eig[2] / sum(rodent.pcoa$eig), 3) * 100
+explainvar3=round(rodent.pcoa$eig[3] / sum(rodent.pcoa$eig), 3) * 100
+sum.eig=sum(explainvar1,explainvar2,explainvar3)
+
+par(mar = c(5, 5, 1, 2) + 0.1)
+plot(rodent.pcoa$points[ ,1], rodent.pcoa$points[ ,2], ylim = c(-0.2, 0.7),
+    xlab = paste("PCoA 1 (", explainvar1, "%)", sep = ""),
+    ylab = paste("PCoA 2 (", explainvar2, "%)", sep = ""),
+    pch = 16, cex = 2.0, type = "n", cex.lab = 1.5, cex.axis = 1.2, axes = FALSE)
+axis(side = 1, labels = T, lwd.ticks = 2, cex.axis = 1.2, las = 1) 
+axis(side = 2, labels = T, lwd.ticks = 2, cex.axis = 1.2, las = 1) 
+abline(h = 0, v = 0, lty = 3)
+box(lwd = 2)
+points(rodent.pcoa$points[ ,1], rodent.pcoa$points[ ,2], 
+       pch = 19, cex = 3, bg = "gray", col = "gray")
+text(rodent.pcoa$points[ ,1], rodent.pcoa$points[ ,2], 
+     labels = row.names(rodent.pcoa$points))
+
+rodentREL=rodent
+
+  for(i in 1:nrow(rodent)){
+    rodentREL[i, ] = rodent[i, ] / sum(rodent[i, ]) 
+  }
+rodent.pcoa=add.spec.scores(rodent.pcoa,rodentREL,method = "pcoa.scores") 
+text(rodent.pcoa$cproj[ ,1], rodent.pcoa$cproj[ ,2],
+     labels = row.names(rodent.pcoa$cproj), col = "black")
 
 ```
 
@@ -145,6 +180,61 @@ abund.ts <- ts(abund$nn, frequency = 2, start = c(1977, 2))
 
 plot.ts(abund.ts, type = "l", ylab = "Rodent Abundance(#/hectare)",
         xlab = "Time (year)", las = 1, ylim = c(0, 500))
+
+
+#smoothing
+abund.sm <- SMA(abund$nn, n = 5)
+
+plot(abund.sm, type = "l", col = "red", ylab = "Rodent Abundance (#/hectare)",
+     xlab = "Sample", las = 1, ylim = c(0, 500))
+
+lines(abund$nn, col = "black")
+
+legend(0, 475, col = c("red", "black"), lty = c(1,1),
+       c("smooth", "non-smooth"), bty = "n", cex = 1)
+
+#exponential smoothing
+abund.hw <- HoltWinters(abund$nn, beta = FALSE, gamma = FALSE)
+
+plot(abund.hw, xlab = "Time (year)", ylim = c(0, 500),
+     ylab = "Rodent Abundance (#/hectrare)", las = 1, main = NA)
+
+legend(0, 475, col = c("black", "red"), lty = c(1,1),
+       c("non-smooth", "smooth"), bty = "n", cex = 1)
+
+#decomposition
+abund.comp <- decompose(abund.ts)
+plot(abund.comp)
+
+abund.adj <- abund.ts - abund.comp$seasonal
+
+#stationarity
+
+adf.raw <- adf.test(abund.ts, alternative = "stationary")
+adf.raw$p.value
+
+abund.ts.diff <- diff(abund.ts)
+adf.diff <- adf.test(abund.ts.diff, alternative = "stationary")
+adf.diff$p.value
+
+#pacf and acf
+acf(abund.ts)
+
+pacf(abund.ts)
+
+#arma
+abund.arm <- auto.arima(abund.ts)
+abund.arm <- arima((abund.ts), c(0, 0, 1), seasonal = list(order = c(2, 1, 0),
+                                                           period = 2), include.mean =
+                     TRUE)
+
+
+tsdiag(abund.arm)
+
+
+pred.arm <- predict(abund.arm, n.ahead = 20)
+ts.plot(abund.ts, pred.arm$pred, lty = c(1,3))
+
 ```
 
 ***Question 3***: Describe the results from your time series analysis.
@@ -165,8 +255,55 @@ In the R code chunk below, do the following:
 3. Perform an RM-ANOVA and construct a F-test using the AR(1), compound symmetery, and unstructured covariance structures.
 
 ```{r}
-abund.sm <- SMA(abund$nn, n=5)
 
+##Wrangling data
+# time-by-species matrix
+time.by.species <- group_by(portal, year, plot_id,
+                            plot_type) %>% count(taxon) %>% spread(key = taxon, value = n,
+                                                                   fill = 0)
+
+# observed richness from time-by-species matrix
+richness <- as.data.frame(rowSums(time.by.species[,-c(1:3)] > 0))
+
+# data frame with experimental design and richness data
+rich.all <- data.frame(time.by.species[,1:3,], richness)
+
+# Rename column
+names(rich.all)[4] <- "richness"
+
+
+# Pull out two of the five Portal treatments
+rich.treat <- rich.all[which(rich.all$plot_type ==
+                               "Control" | rich.all$plot_type == "Rodent Exclosure"), ]
+
+##Plotting data
+rich.treat.plot <- group_by(rich.treat, plot_type, year) %>%
+  summarise(
+    mean = mean(richness), 
+    sd = sd(richness), 
+    n = n(), 
+    sem = sd/sqrt(n)) 
+
+rich.plot <- ggplot(rich.treat.plot, aes(x = year, y = mean, color = plot_type)) +
+  geom_line(size = 1, show.legend = T) +
+  geom_errorbar(aes(ymin = mean - sem, ymax = mean + sem), width = .1) +
+  xlim(1977, 2002) +
+  xlab("Year") +
+  ylab("Richness")+
+  scale_color_grey()
+
+plot(rich.plot)
+
+rich.rm <- lme(richness ~ plot_type * year, random = ~ 1 | plot_id,
+               correlation = corAR1(form = ~ 1 | plot_id),
+               data = rich.treat)
+summary(rich.rm)
+anova(rich.rm)
+
+set.caption("RMANOVA for Portal")
+pander(anova(rich.rm))
+
+lsmeans(rich.rm, ~plot_type)
 ```
 
 ***Question 4***: Describe the results from your RM-ANOVA.
@@ -190,7 +327,46 @@ In the R code chunk below, do the following:
 3. Visualize turnover within each group
 
 ```{r}
+portal.species.abunds <- group_by(portal, year, plot_type) %>% count(taxon)
 
+portal.total <- turnover(df = portal.species.abunds,
+                         time.var = "year",
+                         species.var = "taxon",
+                         abundance.var = "n",
+                         replicate.var = "plot_type",
+                         metric = "total")
+
+portal.appearance <- turnover(df = portal.species.abunds,
+                              time.var = "year",
+                              species.var = "taxon",
+                              abundance.var = "n",
+                              replicate.var = "plot_type",
+                              metric = "appearance")
+
+portal.disappearance <- turnover(df = portal.species.abunds,
+                                 time.var = "year",
+                                 species.var = "taxon",
+                                 abundance.var = "n",
+                                 replicate.var = "plot_type",
+                                 metric = "disappearance")
+
+portal.turnover <- full_join(portal.total, portal.disappearance) %>%
+  full_join(portal.appearance)
+
+portal.turnover <- gather(portal.turnover, key = metric, value = turnover,
+                          total, appearance, disappearance)
+
+turn.plot <- ggplot(
+  portal.turnover, aes(x = year, y = turnover, color = metric)) +
+  geom_line(size = 1, show.legend = T) +
+  facet_wrap(~plot_type, ncol = 1) +
+  xlim(1977, 2002) +
+  xlab("Year") +
+  ylab("Turnover") +
+  theme(legend.position = "bottom") +
+  scale_color_grey()
+
+plot(turn.plot)
 
 ```
 
@@ -206,7 +382,32 @@ In the code chunk below, do the following:
 2. Plot MRS for each through time. 
 
 ```{r}
+portal.abunds.cont.rodent <- filter(portal.species.abunds,
+                                    plot_type == "Control" | plot_type == "Rodent
+                                    Exclosure")
 
+portal.rankshift <- rank_shift(
+  df = as.data.frame(portal.abunds.cont.rodent),
+  time.var = "year",
+  species.var = "taxon",
+  abundance.var = "n",
+  replicate.var = "plot_type")
+
+portal.rankshift$year <- as.numeric(substr(portal.rankshift$year_pair, 6, 9))
+
+rankshift.plot <- ggplot(portal.rankshift, aes(x = year, y = MRS, color = plot_type)) +
+  geom_line(size = 1) +
+  xlim(1977, 2002) +
+  xlab("Year") +
+  ylab("Mean Rank Shift") +
+  scale_color_grey()
+
+plot(rankshift.plot)
+
+group_by(portal.rankshift, plot_type) %>%
+  summarise(
+    mean = mean(MRS),
+    cv = sd(MRS)/mean)
 ```
 
 ***Question 6***:
@@ -224,6 +425,27 @@ In the R code chunk below, do the following:
 2. Plot the results.
 
 ```{r}
+portal.species.abunds$tot.abund <- rep(sum(portal.species.abunds$n),
+                                       length(portal.species.abunds$n))
+
+portal.hellinger.transf <- portal.species.abunds %>%
+  mutate(hellinger.transf = sqrt(n / tot.abund))
+
+portal.change.int <- rate_change_interval(portal.hellinger.transf,
+                                          time.var = "year",
+                                          species.var = "taxon",
+                                          abundance.var = "hellinger.transf",
+                                          replicate.var = "plot_type")
+
+rate.plot <- ggplot(portal.change.int, aes(interval, distance)) +
+  geom_point() +
+  facet_wrap(~plot_type) +
+  theme(strip.text.x = element_text(size = 7)) +
+  stat_smooth(method = "loess", se = F, size = 1) +
+  ylab("Hellinger Distance") +
+  xlab("Time Interval (Years)")
+
+rate.plot
 
 ```
 
@@ -243,7 +465,82 @@ In the R code chunk below, do the following:
 3. Test for a biodiversity-stability relationship by regressing community stability on mean inverse Simpson's diversity.
 
 ```{r}
+#community stability
+portal.stab <- community_stability(df = as.data.frame(portal.species.abunds),
+                                   time.var = "year",
+                                   abundance.var = "n",
+                                   replicate.var = "plot_type")
 
+pander(portal.stab)
+
+#species synchrony
+portal.loreau <- synchrony(df = as.data.frame(portal.species.abunds),
+                           time.var = "year",
+                           species.var = "taxon",
+                           abundance.var = "n",
+                           replicate.var = "plot_type",
+                           metric = "Loreau")
+
+names(portal.loreau)[2] <- "loreau"
+
+portal.gross <- synchrony(df = as.data.frame(portal.species.abunds),
+                          time.var = "year",
+                          species.var = "taxon",
+                          abundance.var = "n",
+                          replicate.var = "plot_type",
+                          metric = "Gross")
+
+names(portal.gross)[2] <- "gross"
+
+pander(full_join(portal.loreau, portal.gross))
+
+#variance ratio
+portal.vr <- variance_ratio(df = as.data.frame(portal.species.abunds),
+                            time.var = "year", species.var = "taxon",
+                            abundance.var = "n", replicate.var = "plot_type",
+                            bootnumber = 1000, average.replicates = T,
+                            level = 0.95)
+pander(portal.vr)
+
+
+#biodiversity-stability
+portal.mean.rich.plot <- rich.all %>%
+  group_by(plot_id) %>%
+  summarise(mean.rich = mean(richness))
+
+portal.plot.abunds <- as.data.frame(
+  group_by(portal, year, plot_id) %>% count(taxon))
+
+portal.stab.plot <- community_stability(df = portal.plot.abunds,
+                                        time.var = "year",
+                                        abundance.var = "n",
+                                        replicate.var = "plot_id")
+
+portal.div.stab <- portal.mean.rich.plot %>%
+  inner_join(portal.stab.plot)
+
+par(mar = c(5,5,1,1))
+
+plot(portal.div.stab$stability ~ portal.div.stab$mean.rich,
+     xlab = "", ylab = "", yaxt = "n", xaxt = "n",
+     xlim = c(2,10), ylim = c(1,4))
+axis(side = 1, cex.axis = 1.2, lwd.ticks = 2, las = 1)
+axis(side = 2, cex.axis = 1.2, lwd.ticks = 2, las = 1)
+axis(side = 3, lwd.ticks = 2, las = 1, labels = F)
+axis(side = 4, lwd.ticks = 2, las = 1, labels = F)
+box(lwd = 2)
+mtext("Mean Richness", side = 1, line = 3, cex = 1.5)
+mtext("Aggregate Stability", side = 2, line = 3.5, cex = 1.5)
+mtext(expression(paste("(CV"^"-1"," Total Abundance)")),
+      side = 2, line = 2.25, cex = .8)
+
+div.stab.lm <- lm(portal.div.stab$stability ~ portal.div.stab$mean.rich)
+
+abline(div.stab.lm)
+
+r2 <- bquote(italic(R)^2 == .(format(
+  summary(div.stab.lm)$adj.r.square, digits = 3)))
+text(3.25,3.75, cex = 1.5, labels = r2)
 
 ```
 
