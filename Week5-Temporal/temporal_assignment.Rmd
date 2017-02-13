@@ -1,10 +1,8 @@
 ---
 title: "Assignment: Temporal Diversity"
-<<<<<<< HEAD
 author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
 =======
 author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
->>>>>>> upstream/master
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
@@ -49,7 +47,7 @@ In the R code chunk below, provide the code to:
 
 rm(list=ls())
 getwd() 
-setwd("~/GitHub/QB2017_Benavidez/Week5-Temporal/")
+setwd("C:/users/Michelle/GitHub/QB2017_Benavidez/Week5-Temporal/")
 
 package.list <- c('vegan', 'tidyr', 'dplyr', 'codyn', 'ggplot2',
                   'cowplot', 'MullerPlot', 'RColorBrewer',
@@ -77,7 +75,7 @@ In the R code chunk below, do the following:
 portal <- read.table("data/combined.csv", sep = ",", header = TRUE)
 summary(portal)
 
-portal=portal[!(portal$taxa %in% c("Bird","Rabbit","Reptile")),]
+portal2=portal[!(portal$taxa %in% c("Bird","Rabbit","Reptile")),]
 
 ```
 
@@ -113,11 +111,11 @@ dplyr::filter(time.by.species,year==1981, plot_id==6)
 dplyr::filter(time.by.species,plot_id==6)
 
 tbs.1981 <- time.by.species[93:116,]
-
+tbs.forpcoa=tbs.1981[,3:29]
 
 diversity(tbs.1981,"simp")
 
-tbs1981.db=vegdist(tbs.1981,method="bray")
+tbs1981.db=vegdist(tbs.forpcoa,method="bray")
 
 rodent.pcoa=cmdscale(tbs1981.db,eig=T, k=3)
 explainvar1=round(rodent.pcoa$eig[1] / sum(rodent.pcoa$eig), 3) * 100
@@ -139,17 +137,15 @@ points(rodent.pcoa$points[ ,1], rodent.pcoa$points[ ,2],
 text(rodent.pcoa$points[ ,1], rodent.pcoa$points[ ,2], 
      labels = row.names(rodent.pcoa$points))
 
-rodentREL=tbs.1981
+rodentREL=tbs.forpcoa
 
-  for(i in 1:nrow(tbs.1981)){
-    rodentREL[i, ] = tbs.1981[i, ] / sum(tbs.1981[i, ]) 
+  for(i in 1:nrow(tbs.forpcoa)){
+    rodentREL[i, ] = tbs.forpcoa[i, ] / sum(tbs.forpcoa[i, ]) 
   }
-rodent.pcoa=add.spec.scores(rodent.pcoa,rodentREL,method = "pcoa.scores") 
-text(rodent.pcoa$cproj[ ,1], rodent.pcoa$cproj[ ,2],
-     labels = row.names(rodent.pcoa$cproj), col = "black")
 
-
-
+plot=c(1:24)
+tbs.stat=tbs.1981[2:31]
+adonis(tbs.stat~plot,method="bray",permtations=999)
 
 ```
 
@@ -158,8 +154,8 @@ text(rodent.pcoa$cproj[ ,1], rodent.pcoa$cproj[ ,2],
 a. Does diversity vary among sites? Does this correspond to treatment type?
 b. Is treatment type a significant predictor of site dissimilarity?
 
-> ***Answer 2a***: 
-> ***Answer 2b***:
+> ***Answer 2a***:  Diversity does vary among sites and this corresponds to treatment ype.
+> ***Answer 2b***:  Treatment type of a significant predictor of site dissimilarity
 
 ## 4) TIME SERIES ANALYSIS
 In the R code chunk below, do the following:  
@@ -357,7 +353,7 @@ d. Of the three RM-ANOVA models with different covariance structures, which one 
 > ***Answer 4a***:  It is testing the effect of plot_type, year, and the interaction between plot_type and year on the response variable (rodent richness).  It is basically a regular ANOVA, but for nonindependent groups.  In this example, we are testing for differences in intercept (time) since we don't have an a priori reason to test intercept-slope model.  
 > ***Answer 4b***:  Based on eyeballing the plot, it seems as if there might be a slight increase of richness over time and the two plot types seems to follow the same general trends (however this may be due to environmental changes).
 > ***Answer 4c***:  Plot_type has a significant effect on rodent richness (F = 12.28, df = 1/12, p < 0.01).  Neither year (F = 0.01, df = 1/343, p = 0.93) nor the interaction between year and plot_type (F = 0.45, df = 1/343, p = 0.51) have a significant effect on rodent richness.  Therefore, there is a significant difference in richness over time when you compare full rodent exclosure from a plot and full rodent access to a plot, and this is most fully explained by the plot_type treatment.  In general, based on the F values treatment means only considerably differ between plot types. 
-> ***Answer 4d***: The autoregressive model worked the best.  This would say that 
+> ***Answer 4d***: The autoregressive model worked the best.  This would say that the time intercept is a good measure of diversity change over time.
 
 ## 6) TEMPORAL BETA DIVERSITY
 
@@ -613,4 +609,4 @@ Identify a few of the major challenges associated with studying biodiversity thr
 > ***Answer***:
 > Autocorrelation between temporal and spatial scales are similar in that they are looking for internal correlative patters, however they are caluculated differently.  Spatially is essentially less complex because it is looking at a single point in time and does not have to account for lag time effects as needs to be considered with temporal autocorrelation.  Scale is also similar between evaluating spatial and temporal data - however, they are referring to two particularly different things.  In spatial analyses scale is referring to the size of the study area - for example, how many square kilometers are needed to caluculate diversity of grasses in central park?  In temoral analyses, lenth of time is the scale - using the same example, how many years should diversity be measured to understand succession of grasses since the contruciton of Central Park?  Variability, like scale, is a similar concept within spatial and temporal diversity but it is estimated in different ways depending on your study.  In spatial ecology variabiliy is measuring a single instance while in temporal ecology isis measuring change in variability over time.  That said, you do need to look at variability of the spaital scope of your temporal analyses in order to look at how that variability changed over time.  Stability is a concept that is only useful for temporal/spatiotemporal studies because it innately implies change over time.  However, turnover can work for both space and time independently - you can look at turnover through years or between sites at a given point in time.
 
-> Studying biodiversity through space and time can be challenging, especially if you want to study make future forcasts.  This is primarily true because it is very difficult to account for all ever-changing variables that might be influencing biodiversity in any given area.  For exmaple, if you are attempting to forcast how diversity and age class of trees in a park will look in the future, how do you account managment practices of the city in which the park is located?  How can you predict if funding will even allow for management?  Furthermore, identifying the appropriate scope of a project is difficult as well - how much/little space and time is necessary to adequatly measure the phenomonon you are attempting to describe?   
+> Studying biodiversity through space and time can be challenging, especially if you want to generate future forcasts.  This is primarily true because it is very difficult to account for all of the ever-changing variables that might be influencing biodiversity in any given area.  This becomes exceptionally complicated if you consider humana activiy.  For exmaple, if you are attempting to forcast how diversity and age class of trees in a park will look in the future, how do you account for changing managment practices of the city in which the park is located?  Can you adequately predict if funding will even allow for management?  Furthermore, identifying the appropriate scope of a project is difficult as well - how much/little space and time is necessary to adequatly measure the phenomonon you are attempting to describe?  Is four years enough time to measure succession rates after a forest fire?  10 years?  How much of the affected area is enough to sample in order to get a representative subset of the entire ecoregion?   
