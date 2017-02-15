@@ -1,10 +1,10 @@
 ---
-title: "Assignment: Temporal Diversity"
-author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
-=======
-author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: pdf_document
+title: 'Assignment: Temporal Diversity'
+author: 'Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University'
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  html_document: default
+  pdf_document: default
 geometry: margin=2.54cm
 ---
 
@@ -49,18 +49,32 @@ rm(list=ls())
 getwd() 
 setwd("C:/users/Michelle/GitHub/QB2017_Benavidez/Week5-Temporal/")
 
-package.list <- c('vegan', 'tidyr', 'dplyr', 'codyn', 'ggplot2',
-                  'cowplot', 'MullerPlot', 'RColorBrewer',
-                  'reshape2', 'lubridate',
-                  'TTR', 'xtable', 'multcomp', 'pander', 'png',
-                  'grid', 'tseries', 'nlme', 'forecast', 'lsmeans')
-for (package in package.list) {
-  if (!require(package, character.only = TRUE, quietly = TRUE)) {
-    install.packages(package, repos='http://cran.us.r-project.org')
-    library(package, character.only = TRUE) 
-    }
-}
-
+require(vegan)
+require(tidyr)
+require(dplyr)
+require(codyn)
+require(ggplot2)
+require(cowplt)
+require(MullerPlot)
+require(RColorBrewer)
+require(reshape2)
+require(lubridate)
+require(TTR)
+require(xtable)
+require(multcomp)
+require(pander)
+require(png)
+require(grid)
+require(tseries)
+require(nlme)
+require(forecast)
+require(lsmeans)
+require("vegan")
+require("ade4")
+require("BiodiversityR")
+require("gplots")
+require("viridis")
+require("indicspecies")
 ```
 
 ## 2) LOADING DATA
@@ -318,29 +332,23 @@ pander(anova(rich.rm))
 
 lsmeans(rich.rm, ~plot_type)
 
+
 #unstructured
-rich.rm <- lme(richness ~ plot_type * year, random = ~ 1 | plot_id,
-               correlation = corSymm(form = ~ 1 | plot_id),
-               data = rich.treat)
-summary(rich.rm)
-anova(rich.rm)
+#rich.rmuns <- lme(richness ~ plot_type * year, random = ~ plot_type * year | plot_id, data = rich.treat,correlation = corSymm(form = ~ 1 | plot_id), control = lmeControl(opt='optim'))
 
-set.caption("RMANOVA for Portal")
-pander(anova(rich.rm))
-
-lsmeans(rich.rm, ~plot_type)
 
 #compound symmetry
-rich.rm <- lme(richness ~ plot_type * year, random = ~ 1 | plot_id,
+rich.rmcom <- lme(richness ~ plot_type * year, random = ~ 1 | plot_id,
                correlation = corCompSymm(form = ~ 1 | plot_id),
                data = rich.treat)
-summary(rich.rm)
-anova(rich.rm)
+summary(rich.rmcom)
+anova(rich.rmcom)
+
 
 set.caption("RMANOVA for Portal")
-pander(anova(rich.rm))
+pander(anova(rich.rmcom))
 
-lsmeans(rich.rm, ~plot_type)
+lsmeans(rich.rmcom, ~plot_type)
 ```
 
 ***Question 4***: Describe the results from your RM-ANOVA.
@@ -353,7 +361,7 @@ d. Of the three RM-ANOVA models with different covariance structures, which one 
 > ***Answer 4a***:  It is testing the effect of plot_type, year, and the interaction between plot_type and year on the response variable (rodent richness).  It is basically a regular ANOVA, but for nonindependent groups.  In this example, we are testing for differences in intercept (time) since we don't have an a priori reason to test intercept-slope model.  
 > ***Answer 4b***:  Based on eyeballing the plot, it seems as if there might be a slight increase of richness over time and the two plot types seems to follow the same general trends (however this may be due to environmental changes).
 > ***Answer 4c***:  Plot_type has a significant effect on rodent richness (F = 12.28, df = 1/12, p < 0.01).  Neither year (F = 0.01, df = 1/343, p = 0.93) nor the interaction between year and plot_type (F = 0.45, df = 1/343, p = 0.51) have a significant effect on rodent richness.  Therefore, there is a significant difference in richness over time when you compare full rodent exclosure from a plot and full rodent access to a plot, and this is most fully explained by the plot_type treatment.  In general, based on the F values treatment means only considerably differ between plot types. 
-> ***Answer 4d***: The autoregressive model worked the best.  This would say that the time intercept is a good measure of diversity change over time.
+> ***Answer 4d***: The autoregressive model appeared to work the best.  This would say that the time intercept is a good measure of diversity change over time.
 
 ## 6) TEMPORAL BETA DIVERSITY
 
