@@ -1,6 +1,10 @@
 ---
 title: "Phylogenetic Diversity - Traits"
+<<<<<<< HEAD
 author: "Michelle Benavidez; Z620: Quantitative Biodiversity, Indiana University"
+=======
+author: "Student Name; Z620: Quantitative Biodiversity, Indiana University"
+>>>>>>> upstream/master
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 geometry: margin=2.54cm
@@ -45,6 +49,7 @@ In the R code chunk below, provide the code to:
 4. load all of the required R packages (be sure to install if needed).  
 
 ```{r}
+<<<<<<< HEAD
 rm(list = ls())
 getwd()
 setwd("~/GitHub/QB2017_Benavidez/Week6-PhyloTraits")
@@ -55,6 +60,10 @@ for (package in package.list){
     library(package, character.only = T)
   }
 }
+=======
+
+
+>>>>>>> upstream/master
 ```
 
 ## 2) DESCRIPTION OF DATA
@@ -78,6 +87,7 @@ In the R code chunk below, do the following:
 4. plot the alignment using a grid to visualize rows of sequences.
 
 ```{r}
+<<<<<<< HEAD
 read.aln <- read.alignment(file = "./data/p.isolates.afa", format = "fasta")
 
 p.DNAbin <- as.DNAbin(read.aln)
@@ -85,16 +95,28 @@ p.DNAbin <- as.DNAbin(read.aln)
 window <- p.DNAbin[, 100:500]
 
 image.DNAbin(window, cex.lab = 0.50)
+=======
+
+
+>>>>>>> upstream/master
 ```
 
 ***Question 2***:  Make some observations about the `muscle` alignment of the 16S rRNA gene sequences for our bacterial isolates and the outgroup, *Methanosarcina*, a member of the domain archaea. 
 Move along the alignment by changing the values in the `window` object. 
 
+<<<<<<< HEAD
 a. Approximately how long are our reads? 
 b. What regions do you think would are appropriate for phylogenetic inference and why?  
 
 > ***Answer 2a***:  ~400bp
 > ***Answer 2b***:  around 100bp, because this is where most of the bariation seems to exist 
+=======
+a. Approximately how long are our reads?  
+b. What regions do you think would are appropriate for phylogenetic inference and why?  
+
+> ***Answer 2a***:   
+> ***Answer 2b***:  
+>>>>>>> upstream/master
 
 ## 4) MAKING A PHYLOGENETIC TREE
 
@@ -110,6 +132,7 @@ In the R code chunk below, do the following:
 4. plot the rooted tree. 
 
 ```{r}
+<<<<<<< HEAD
 seq.dist.raw <- dist.dna(p.DNAbin, model = "raw", pairwise.deletion = F)
 
 nj.tree <- bionj(seq.dist.raw)
@@ -121,6 +144,9 @@ plot.phylo(nj.rooted, main = "Neighbor Joining Tree", "phylogram",
            use.edge.length = F, direction = "right", cex = 0.6,
            label.offset = 1)
 add.scale.bar(cex = 0.7)
+=======
+
+>>>>>>> upstream/master
 
 ```
 
@@ -140,6 +166,7 @@ In the R code chunk below, do the following:
 4. create a cophylogenetic plot to compare the topologies of the trees.
 
 ```{r}
+<<<<<<< HEAD
 seq.dist.F84 <- dist.dna(p.DNAbin, model = "F84", pairwise.deletion = F)
 
 par(mar = c(5,5,2,1) + 0.1)
@@ -166,6 +193,9 @@ plot.phylo(raw.rooted, type = "phylogram", direction = "right", show.tip.label =
 par(mar = c(1,0,2,1))
 plot.phylo(F84.rooted, type = "phylogram", direction = "left", show.tip.label = T,
            use.edge.length = F, adj = 0.5, cex = 0.6, label.offset = 2, main = "F84")
+=======
+
+>>>>>>> upstream/master
 
 ```
 
@@ -177,6 +207,7 @@ In the R code chunk below, do the following:
 5. be sure to format, add appropriate labels, and customize each plot.
 
 ```{r}
+<<<<<<< HEAD
 seq.dist.K80 <- dist.dna(p.DNAbin, model = "K80", pairwise.deletion = F)
 
 par(mar = c(5,5,2,1) + 0.1)
@@ -204,6 +235,10 @@ plot.phylo(K80.rooted, type = "phylogram", direction = "right", show.tip.label =
 par(mar = c(1,0,2,1))
 plot.phylo(F84.rooted, type = "phylogram", direction = "left", show.tip.label = T,
            use.edge.length = F, adj = 0.5, cex = 0.6, label.offset = 2, main = "F84")
+=======
+
+
+>>>>>>> upstream/master
 ```
 
 ***Question 4***:  
@@ -224,6 +259,7 @@ In the R code chunk below, do the following:
 2. Plot bootstrap support values onto the tree
 
 ```{r}
+<<<<<<< HEAD
 p.DNAbin.phyDat <- read.phyDat("./data/p.isolates.afa", format = "fasta", type = "DNA")
 fit <- pml(nj.rooted, data=p.DNAbin.phyDat)
 
@@ -238,6 +274,10 @@ AIC(fitGTR)
 
 bs = botstrap.pml(fitJC, bs = 100, optNni = T,
                   control = pml.control(trace = 0))
+=======
+
+
+>>>>>>> upstream/master
 ```
 
 ***Question 5***:  
