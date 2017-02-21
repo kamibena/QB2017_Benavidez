@@ -98,8 +98,7 @@ a. Approximately how long are our reads?
 b. What regions do you think would are appropriate for phylogenetic inference and why?  
 
 > ***Answer 2a***:  ~400bp
-> ***Answer 2b***:  The first ~75bp and the area before 400bp, because this is where most of the variation seems to exist 
-
+> ***Answer 2b***:  The first ~75bp and the area before ~400bp, because this is where most of the variation seems to exist 
 
 ## 4) MAKING A PHYLOGENETIC TREE
 
@@ -134,7 +133,7 @@ add.scale.bar(cex = 0.7)
 ***Question 3***: What are the advantages and disadvantages of making a neighbor joining tree?   
 
 
-> ***Answer 3***:  Advantages: This process analyzes a large number of sequences very quickly.  Disadvantages:  The algorithm used for star decomposition does not exhaust all the possibilities so likley does not give the more optimal solution (but it does give a good approximation).   
+> ***Answer 3***:  Advantages: This process analyzes a large number of sequences very quickly.  Can use plain(?) reads to build the tree and it corrects for multiple substitutions.  Disadvantages:  Information in the reads are greatly reduced.  The algorithm used for star decomposition does not exhaust all the possibilities so likley does not give the more optimal solution (but it does give a good approximation); therefore, we only get to see one tree out of several alternatives.  Only serves as a starting point.  
  
 
 
