@@ -48,7 +48,7 @@ In the R code chunk below, provide the code to:
 
 rm(list = ls())
 getwd()
-setwd("~/GitHub/QB2017_Benavidez/Week6-PhyloTraits")
+setwd("C:/Users/Michelle/GitHub/QB2017_Benavidez/Week6-PhyloTraits")
 package.list <- c("ape","seqinr","phylobase","adephylo","geiger","picante","stats","RColorBrewer","caper","phylolm","pmc","ggplot2","tidyr","dplyr","phangorn","pander")
 for (package in package.list){
   if (!require(package, character.only = T, quietly = T)){
@@ -546,7 +546,7 @@ d. Try to come up with a scenario where the relationship between two variables w
 > ***Answer 10a***: It is important to account for shared evolutionary history because of possible phylogenetic dependencies among traits.  If the observed patterns among your study subjects is a result of a recently shared common anscestor, then  you cannot treat those study subjects as independent samples. 
 > ***Answer 10b***:  Phylogenetic regression differ from a simple linear regression because it accounts for potential phylogenetic dependencies among study subjects; therefore, it accounts for inherent nonindependence that may exist.
 > ***Answer 10c***: For the simple linear regression, approximately 70% of the residual variation was accounted for by the model.  For the phylogenetic model, approximately 71% of the residual variation was accounted for my the model.  Accounting for the shared evolutionary hisotry slightly improved the fit of the regession.
-> ***Answer 10d***: 
+> ***Answer 10d***: Forging strategy and gut morphology among cebid monkeys.
 
 
 ## 7) SYNTHESIS
