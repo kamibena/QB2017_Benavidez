@@ -71,7 +71,7 @@ In this exercise, we will take a phylogenetic approach to mapping phosphorus res
 ***Question 1***: Using less or your favorite text editor, compare the `p.isolates.fasta` file and the `p.isolates.afa` file. 
 Describe the differences that you observe between the files. 
 
-> ***Answer 1***: 
+> ***Answer 1***: The fasta file looked clear.  Seemed to compress the sequences so that the missing fragments weren't empty data points.
 
 In the R code chunk below, do the following:
 1. read your alignment file,
