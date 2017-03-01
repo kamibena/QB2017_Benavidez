@@ -147,8 +147,6 @@ In the R code chunk below, do the following:
 
 pd <- pd(comm, phy, include.root = FALSE)
 
-
-
 ```
 
 In the R code chunk below, do the following:  
@@ -182,8 +180,8 @@ c.  When would you expect these two estimates of diversity to deviate from one a
 d.  Interpret the significance of the scaling PD-S scaling exponent.
 
 > ***Answer 1a***:  PD is based on incidence data, so when estimating shared branch length sums it is directly associated with evolutionary taxa richness.  
-> ***Answer 1b***:  When you have a larger number of evolutionary diversgent taxa in the communitiy, you will have high PD values.  When you have fewer divergent taxa, you will have few shared branches; therefore you will have lower PD values.                                       
-> ***Answer 1c***:  Taxonomic rishness and and phyldivserity should deviate when....
+> ***Answer 1b***:  When you have a larger number of evolutionary divergent taxa in the communitiy, you will have high PD values.  When you have fewer divergent taxa, you will have few shared branches; therefore you will have lower PD values.                                       
+> ***Answer 1c***:  Taxonomic rishness and and phylodivserity should deviate when taxa within the dataset are less phylogenetically divergent.
 > ***Answer 1d***: Pd-S tells us that the relationship between PD (evolutionary diversity metric) and S (ruchness metric) scales to a strength of 0.75.  
 
 
@@ -210,8 +208,8 @@ a.  What are the null and alternative hypotheses you are testing via randomizati
 b.  How did your choice of null model influence your observed ses.pd values?  Explain why this choice affected or did not affect the output. 
 
 
-> ***Answer 2a***:  The null model we are testing is richness, which is a randomized community matrix based on the sample pool - this model keeps constant the fequency of species occurences.  
-> ***Answer 2b***:  
+> ***Answer 2a***:  Based on randomized null model, the null hypothesis is ses.pd < 0 [i.e. less phylogenetically diverse than expected by chance] and the alternative hypothesis is that ses.pd > 0 [i.e. more phylogenetically diverse than expected by chance].
+> ***Answer 2b***:  The randomly generated mean was higher and the standard deviation was lower than when using the richness null. These changes in turn alter the values of rank, effect size, and p - values. 
 
 ### B.  Phylogenetic Dispersion Within a Sample
 Another way to assess phylogenetic $\alpha$-diversity is to look at dispersion within a sample. 
@@ -286,8 +284,8 @@ How does this affect the interpretation of NRI and NTI?
 
 > ***Answer 3a***: Net Relatedness Index - This seems essentially to be a measure of phylogenetic diversity.  It measures the liklihood that species in a dataset are more closely related than you would expect by random chance - so in other words NRI tests for overdispersion or clustering within a dataset.   
 > ***Answer 3b***:  Nearest Taxon Index - This is basically the same thing as NRI except that it uses mean distances to the nearest phylogenetic neighbor instead of the mean phylogenetic distance that NRI uses.  
-> ***Answer 3c***:  
-> ***Answer 3d***:  
+> ***Answer 3c***:  On the whole, all values are negative (only exception is BC001 for NTI estimate); therefore NRI and NTI values generally suggest that these taxa are less phylogenetically diverse than you would expect by chance [i.e. the samples are overdispersed]. 
+> ***Answer 3d***:  In both cases (NRI and NTI), using abundance data generated more positive values than using incidence data; therefore, using abundance data gives an opposite intrepretation and clustering may be suspected.
 
 ## 5) PHYLOGENETIC BETA DIVERSITY 
 
@@ -327,7 +325,7 @@ c. Why might MPD show less variation than UniFrac?
 
 > ***Answer 4a***: Both mean pair distance and unifrqac distance are methods to calculate the phylogenetic distance between two samples, however they are mathamatically different.  Mean pairwise difference uses the average phylogenetic difference between samples while unifrac uses the ratio of unshared branch lengths to the total branch lengths in a rooted tree. 
 > ***Answer 4b***: There is a narrow range of variation in mean pair distance and wide variation in unifrac distances.
-> ***Answer 4c***: XXX Mean pair distance show less variation because it is measuring averages between pairs of samples while unifrac is measuring distance ratios between pairs of samples.
+> ***Answer 4c***: Since UniFrac is taking the ratio of unshared to total branch length, there should be more variation if a larger proportion of branches are shared.  This pattern would be less noticable with mean pair ditance since it calculates distance based on mean phylogenetic difference between samples.
 
 
 ### B. Visualizing Phylogenetic Beta-Diversity
@@ -344,6 +342,7 @@ explainvar1 <- round(pond.pcoa$eig[1] / sum(pond.pcoa$eig), 3) * 100
 explainvar2 <- round(pond.pcoa$eig[2] / sum(pond.pcoa$eig), 3) * 100 
 explainvar3 <- round(pond.pcoa$eig[3] / sum(pond.pcoa$eig), 3) * 100 
 sum.eig <- sum(explainvar1, explainvar2, explainvar3)
+
 
 
 ```
@@ -382,10 +381,38 @@ In the following R code chunk:
 1. perform another PCoA on taxonomic data using an appropriate measure of dissimilarity, and
 2. calculate the explained variation on the first three PCoA axes. 
 
+```{r}
+comm.db=vegdist(comm,method="bray",upper=T,diag=T) 
+
+
+pond.pcoa.1 <- cmdscale(comm.db, eig = T, k = 3)
+explainvar1.1 <- round(pond.pcoa.1$eig[1] / sum(pond.pcoa.1$eig), 3) * 100 
+explainvar2.1 <- round(pond.pcoa.1$eig[2] / sum(pond.pcoa.1$eig), 3) * 100 
+explainvar3.1 <- round(pond.pcoa.1$eig[3] / sum(pond.pcoa.1$eig), 3) * 100 
+sum.eig <- sum(explainvar1.1, explainvar2.1, explainvar3.1)
+
+par(mar = c(5, 5, 1, 2) + 0.1)
+
+plot(pond.pcoa.1$points[ ,1], pond.pcoa.1$points[ ,2],
+     xlim = c(-0.2, 0.2), ylim = c(-.16, 0.16),
+     xlab = paste("PCoA 1 (", explainvar1.1, "%)", sep = ""),
+     ylab = paste("PCoA 2 (", explainvar2.1, "%)", sep = ""),
+     pch = 16, cex = 2.0, type = "n", cex.lab = 1.5, cex.axis = 1.2, axes = FALSE)
+
+axis(side = 1, labels = T, lwd.ticks = 2, cex.axis = 1.2, las = 1) 
+axis(side = 2, labels = T, lwd.ticks = 2, cex.axis = 1.2, las = 1) 
+abline(h = 0, v = 0, lty = 3)
+box(lwd = 2)
+
+points(pond.pcoa.1$points[ ,1], pond.pcoa.1$points[ ,2], 
+       pch = 20, cex = 2, bg = "grey", col = "blue")
+text(pond.pcoa.1$points[ ,1], pond.pcoa.1$points[ ,2], 
+     labels = row.names(pond.pcoa.1$points))
+```
 
 ***Question 5***: Using a combination of visualization tools and percent variation explained, how does the phylogenetically based ordination compare or contrast with the taxonomic ordination? What does this tell you about the importance of phylogenetic information in this system?
 
-> ***Answer 5***: 
+> ***Answer 5***: Taxonomic data shows more clustering than the phylogenetic PCoA, and in the taxonomic PCoA more variation is explained by PCoA 1 and 2.  Accounting for phylogenetics in this case was imporant because it reducing the chances of Type 1 error.  The taxonomic data alone was cryptically influenced by phylogony within the dataset and was unable to estimate true variation between samples.
 
 ### C. Hypothesis Testing
 
@@ -482,7 +509,7 @@ axis(side = 4, lwd.ticks = 2, cex.axis = 1.2, las = 1, col = "red", lwd = 2.2,at
 
 ***Question 6***: Based on the multivariate procedures conducted above, describe the phylogenetic patterns of $\beta$-diversity for bacterial communities in the Indiana ponds.   
 
-> ***Answer 6***: 
+> ***Answer 6***: Watershed does influence baterical communities and this is particularly determined by water depth, ORP, water teperature, SpC, water pH, and Chla.
 
 ## 6) SPATIAL PHYLOGENETIC COMMUNITY ECOLOGY
 
@@ -559,7 +586,7 @@ diffslope(df$geo.dist, df$unifrac, df$geo.dist, df$bray.curtis)
 
 ***Question 7***: Interpret the slopes from the taxonomic and phylogenetic DD relationships. If there are differences, hypothesize why this might be.   
 
-> ***Answer 7***: 
+> ***Answer 7***: The slopes are statistically different.  Since Bray-Curtis incorporates taxa abundance and UniFrac accounts for phylogenetic relatedness, then genetic relatedness may play a key role in explaining the distribution of these taxa.
 
 
 ### B. Phylogenetic diversity-area relationship (PDAR)
@@ -640,8 +667,10 @@ legend("topleft", legend= c(paste("Spearman Correlation = ", rho, "; p = ", rho.
 ***Question 8***: Compare your observations of the microbial PDAR and SAR in the Indiana ponds?
 How might you explain the differences between the taxonomic (SAR) and phylogenetic (PDAR)?  
 
-> ***Answer 8***: 
+> ***Answer 8***: The slope of the SAR from the spaptial assignment was steeper than the PDAR for this assignment.  Since the taxa are phylogentically similar, as the area gets larger there is not necessarily higher richness when accounting for phylogenetic relatedness.
 
 ## SYNTHESIS
 
 Ignoring technical or methodological constraints, discuss how phylogenetic information could be useful in your own research. Specifically, what kinds of phylogenetic data would you need? How could you use it to answer important questions in your field? In your response, feel free to consider not only phylogenetic approaches related to phylogenetic community ecology, but also those we discussed last week in the PhyloTraits module, or any other concepts that we have not covered in this course.
+
+> A major component of my research is intepreting gut microbial diversity of howler monkeys in relation to measures of health (IgA levels, parasitic infections, hormones).  Estimating the phylogenetic relationship of members of the bacterial community may provide more insightful results concerning any possible associations between microbial diversity of the gut and other measures in the study.  For this, I would need to generate sequences from the 16s rRNA region of my samples along with an outgroup (which I could likely get from GenBank).  Accounting for these potential relationships will be especially useful when I begin to compare diversity among contrasting habitat types through Panama since a major question in the field is if/why gut microbial diversity is varies in relation to environmental conditions.  If more is understood about this relationship then it could potentially improve noninvasive monitoring methods for rare and endangered species, especially if they are sensitive to habitat encroachment and stress.       
